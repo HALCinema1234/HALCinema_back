@@ -5,7 +5,7 @@ class Db{
     private $pass, $host, $dbname, $port, $dsn;
 
     // コンストラクタ(インスタンス化された時に実行される)
-    function __construct($dbname = "mini_bbs",
+    function __construct($dbname = "halcinema",
                     $id     = "root",
                     $pass   = "",
                     $host   = "localhost",
@@ -27,17 +27,21 @@ class Db{
     // DB接続(返り値:true/false)
     // ==============================================================================
     function connect(){
-        $flg = true;
 
         try{
-            $this->db = new PDO($this->dsn, $this->userid, $this->pass);
+            $driver_option = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ];
+            $this->db = new PDO($this->dsn, $this->userid, $this->pass, $driver_option);
         }
         catch( PDOException $e ){
-            $flg = false;
-            print "接続エラー：".$e->getMessage();
+            header("Content-Type: application/json; charset=utf-8", true, 500);
+            echo json_encode( ["error" => ["type" => "server_error", "message"=>$e->getMessage()] ] );
+            die();
         }
 
-        return $flg;
+        return $this->db;
     }
 
     // ==============================================================================
