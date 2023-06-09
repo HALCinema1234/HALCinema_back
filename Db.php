@@ -43,34 +43,6 @@ class Db{
 
         return $this->db;
     }
-
-    // ==============================================================================
-    // SQL
-    // ==============================================================================
-    private $sqlMembers = 'select * from members;';
-    private $sqlPosts   = 'select * from posts;';
-
-    // ==============================================================================
-    // DB検索
-    // ==============================================================================
-    // 汎用
-    function show($sql){
-        $contents = $this->db->prepare($sql);
-        $contents->execute();
-
-        return $contents;
-    }
-
-    // members
-    function getMembers(){
-        return $this->show($this->sqlMembers)->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // posts
-    function getPosts(){
-        return $this->show($this->sqlPosts)->fetchAll(PDO::FETCH_ASSOC);
-    }
-
 }
 
 ?>
