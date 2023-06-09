@@ -87,8 +87,12 @@ class MoviesController{
         // 映画情報と上映種別情報と画像情報の連結
         $res_movie["types"]     = array();
         $res_movie["images"]    = array();
-        foreach($res_types as $res_type){ array_push($res_movie["types"], $res_type['name']); }
-        foreach($res_images as $res_image){ array_push($res_movie["images"], $res_image['image_url']); }
+        foreach($res_types as $res_type){
+            array_push( $res_movie["types"], $res_type['name'] );
+        }
+        foreach($res_images as $res_image){
+            array_push( $res_movie["images"], $this->encode_image($res_image['image_url']) );
+        }
 
         if($res_movie){
             return $res_movie;
@@ -134,7 +138,7 @@ class MoviesController{
             }
             foreach($res_images as $res_image){
                 if($res_movies[$cnt]["id"] == $res_image['id']){
-                    array_push($res_movies[$cnt]["images"], $res_image['image_url']);
+                    array_push($res_movies[$cnt]["images"], $this->encode_image($res_image['image_url']));
                 }
             }
 
@@ -148,6 +152,13 @@ class MoviesController{
             $this->code = 500;
             return ["error" => [ "type" => "fatal_error" ]];
         }
+    }
+
+    // 画像をbase64へエンコード
+    private function encode_image($img_url){
+        $img        = file_get_contents($img_url);  // ファイルの内容をs文字列にする
+        $enc_img    = base64_encode($img);          // base64でエンコードする
+        return $enc_img;
     }
 
     // 引数の取得があるかどうか
