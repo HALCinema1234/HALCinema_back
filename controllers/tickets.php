@@ -1,6 +1,6 @@
 <?php
 
-class TicketController{
+class TicketsController{
     public $code = 200;
     public $url;
     public $request_body;
