@@ -19,7 +19,7 @@ class Controller{
 
     // 画像をbase64へエンコード
     protected function encode_image($img_url):string{
-        $img        = file_get_contents($img_url);  // ファイルの内容をs文字列にする
+        $img        = file_get_contents($img_url);  // ファイルの内容を文字列にする
         $enc_img    = base64_encode($img);          // base64でエンコードする
         return $enc_img;
     }
