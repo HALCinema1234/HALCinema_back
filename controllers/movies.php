@@ -1,20 +1,9 @@
 <?php
-class MoviesController{
-
-    public $code = 200;
-    public $url;
-    public $request_body;
-
-    // コンストラクター
-    function __construct(){
-        $this->url = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . mb_substr($_SERVER['SCRIPT_NAME'],0,-9) . basename(__FILE__, ".php")."/";
-        $this->request_body = json_decode(mb_convert_encoding(file_get_contents('php://input'),"UTF8","ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN"), true);
-    }
-
+class MoviesController extends Controller{
     // =============================================================================
     // sql
     // =============================================================================
-    private $select_movie = "
+    private $select_movies = "
         SELECT
             f_movie_id                  AS id,
             f_movie_name                AS name,
@@ -62,36 +51,24 @@ class MoviesController{
     // idで抽出
     private function getById($db, $id):array{
         // sql
-        $sql_movie  = $this->select_movie . "   WHERE f_movie_id = :id";
+        $sql_movie  = $this->select_movies . "   WHERE f_movie_id = :id";
         $sql_type   = $this->select_types . "   WHERE handling.f_movie_id = :id";
         $sql_image  = $this->select_images . "   WHERE f_movie_id = :id";
 
-        // 映画TBL検索
-        $movies = $db->connect()->prepare($sql_movie);
-        $movies->bindparam(':id', $id, PDO::PARAM_INT);
-        $movies->execute();
-        $res_movie = $movies->fetch(PDO::FETCH_ASSOC);
-
-        // 上映種別TBL検索
-        $types = $db->connect()->prepare($sql_type);
-        $types->bindparam(':id', $id, PDO::PARAM_INT);
-        $types->execute();
-        $res_types = $types->fetchAll(PDO::FETCH_ASSOC);
-        
-        // 画像TBL検索
-        $images = $db->connect()->prepare($sql_image);
-        $images->bindparam(':id', $id, PDO::PARAM_INT);
-        $images->execute();
-        $res_images = $images->fetchAll(PDO::FETCH_ASSOC);
+        $res_movie  = parent::selectById($db, $sql_movie, $id)[0];    // 映画TBL検索
+        $res_types  = parent::selectById($db, $sql_type, $id);        // 上映種別TBL検索
+        $res_images = parent::selectById($db, $sql_image, $id);      // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $res_movie["types"]     = array();
         $res_movie["images"]    = array();
+
         foreach($res_types as $res_type){
             array_push( $res_movie["types"], $res_type['name'] );
         }
+
         foreach($res_images as $res_image){
-            array_push( $res_movie["images"], $this->encode_image($res_image['image_url']) );
+            array_push( $res_movie["images"], parent::encode_image($res_image['image_url']) );
         }
 
         if($res_movie){
@@ -106,24 +83,13 @@ class MoviesController{
     // すべて
     private function getAll($db):array{
         // sql
-        $sql_movie  = $this->select_movie . "    ORDER BY id";
-        $sql_type   = $this->select_types . "    ORDER BY id";
-        $sql_image  = $this->select_images . "    ORDER BY id";
+        $sql_movies  = $this->select_movies . "    ORDER BY id";
+        $sql_types   = $this->select_types . "    ORDER BY id";
+        $sql_images  = $this->select_images . "    ORDER BY id";
 
-        // 映画TBL検索
-        $movies = $db->connect()->prepare($sql_movie);
-        $movies->execute();
-        $res_movies = $movies->fetchAll(PDO::FETCH_ASSOC);
-
-        // 上映種別TBL検索
-        $types = $db->connect()->prepare($sql_type);
-        $types->execute();
-        $res_types = $types->fetchAll(PDO::FETCH_ASSOC);
-
-        // 画像TBL検索
-        $images = $db->connect()->prepare($sql_image);
-        $images->execute();
-        $res_images = $images->fetchAll(PDO::FETCH_ASSOC);
+        $res_movies = parent::select($db, $sql_movies);   // 映画TBL検索
+        $res_types  = parent::select($db, $sql_types);    // 上映種別TBL検索
+        $res_images = parent::select($db, $sql_images);   // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $cnt = 0;
@@ -136,6 +102,7 @@ class MoviesController{
                     array_push($res_movies[$cnt]["types"], $res_type['name']);
                 }
             }
+
             foreach($res_images as $res_image){
                 if($res_movies[$cnt]["id"] == $res_image['id']){
                     array_push($res_movies[$cnt]["images"], $this->encode_image($res_image['image_url']));
@@ -152,18 +119,6 @@ class MoviesController{
             $this->code = 500;
             return ["error" => [ "type" => "fatal_error" ]];
         }
-    }
-
-    // 画像をbase64へエンコード
-    private function encode_image($img_url){
-        $img        = file_get_contents($img_url);  // ファイルの内容をs文字列にする
-        $enc_img    = base64_encode($img);          // base64でエンコードする
-        return $enc_img;
-    }
-
-    // 引数の取得があるかどうか
-    private function is_set($value):bool{
-        return !( is_null($value) || $value === "" );
     }
 }
 
