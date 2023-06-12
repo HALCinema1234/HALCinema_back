@@ -9,6 +9,7 @@ class ManagesController extends Controller{
             manage.f_movie_manage_id            AS id,
             manage.f_movie_manage_day           AS day,
             manage.f_movie_manage_start_time    AS start,
+            manage.f_movie_manage_start_time    AS end,
             manage.f_theater_id                 AS theater_id,
             theater.f_theater_type              AS theater_type,
             CASE theater.f_theater_type
@@ -31,32 +32,14 @@ class ManagesController extends Controller{
         ON
             manage.f_theater_id = theater.f_theater_id";
 
-    private $select_types = "
-        SELECT
-            handling.f_movie_id         AS id,
-            type.f_movie_type_name      AS name
-        FROM
-            t_handling_movie_types as handling
-        JOIN
-            t_movie_types as type
-        ON
-            handling.f_movie_type_id = type.f_movie_type_id";
-    
-    private $select_images = "
-        SELECT
-            f_movie_id          AS id,
-            f_movie_image_url   AS image_url
-        FROM
-            t_movie_images";
-
     // =============================================================================
     // get
     // =============================================================================
     public function get($id=null):array {
-        $db = new DB();
+        // $db = new DB();
 
         if(parent::is_set($id)){
-            return $this->getById($db, $id);
+            return $this->getById($id);
         }
         else{
             $this->code = 500;
@@ -65,15 +48,15 @@ class ManagesController extends Controller{
     }
 
     // idで抽出
-    private function getById($db, $id):array{
+    private function getById($id):array{
         // sql
         $sql_movie  = $this->select_movies . "   WHERE manage.f_movie_id = :id";
-        $sql_types  = $this->select_types . "   WHERE handling.f_movie_id = :id";
-        $sql_images = $this->select_images . "   WHERE f_movie_id = :id";
+        $sql_types  = Sql::SelectTypes . "   WHERE handling.f_movie_id = :id";
+        $sql_images = Sql::SelectImages . "   WHERE f_movie_id = :id";
 
-        $res_movie  = parent::selectById($db, $sql_movie, $id)[0];  // 映画TBL検索
-        $res_types  = parent::selectById($db, $sql_types, $id);     // 上映種別TBL検索
-        $res_images = parent::selectById($db, $sql_images, $id);    // 画像TBL検索
+        $res_movie  = parent::selectById($sql_movie, $id)[0];  // 映画TBL検索
+        $res_types  = parent::selectById($sql_types, $id);     // 上映種別TBL検索
+        $res_images = parent::selectById($sql_images, $id);    // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $res_movie["movie_types"]     = array();
