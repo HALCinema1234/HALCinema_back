@@ -4,7 +4,7 @@ class Controller{
     public $code = 200;
     public $url, $request_body;
 
-    private $scheme, $host, $path, $controller;
+    private $scheme, $host, $path, $controller, $db;
 
     // コンストラクター
     function __construct(){
@@ -15,6 +15,7 @@ class Controller{
 
         $this->url          =  $this->scheme . $this->host . $this->path .  $this->controller . "/";
         $this->request_body = json_decode( $this->encode_utf8('php://input'), true );
+        $this->db           = new DB();
     }
 
     // 画像をbase64へエンコード
@@ -36,15 +37,15 @@ class Controller{
     }
 
     // すべて検索
-    protected function select($db, $sql):array{
-        $sourses = $db->connect()->prepare($sql);
+    protected function select($sql):array{
+        $sourses = $this->db->connect()->prepare($sql);
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // ID検索
-    protected function selectById($db, $sql, $id):array{
-        $sourses = $db->connect()->prepare($sql);
+    protected function selectById($sql, $id):array{
+        $sourses = $this->db->connect()->prepare($sql);
         $sourses->bindparam(':id', $id, PDO::PARAM_INT);
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
