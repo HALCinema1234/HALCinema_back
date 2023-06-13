@@ -39,6 +39,39 @@ class Sql{
                 f_ticket_price  As price
             FROM
                 t_tickets";
+
+    const SelectSchedules = "
+            SELECT
+                manage.f_movie_manage_id            AS id,
+                manage.f_movie_manage_day           AS day,
+                manage.f_movie_manage_start_time    AS start,
+                DATE_ADD(
+                    manage.f_movie_manage_start_time,
+                    INTERVAL CEIL(movie.f_movie_time/10)*10 + :time1 MINUTE
+                )                                   AS end,
+                CEIL(movie.f_movie_time/10)*10      AS screening_time,
+                :time2                              AS advertising_time,
+                manage.f_theater_id                 AS theater_id,
+                theater.f_theater_type              AS theater_type,
+                CASE theater.f_theater_type
+                    WHEN 1 THEN '大'
+                    WHEN 2 THEN '中'
+                    ELSE '小'
+                END                                 AS theater_type_name,
+                movie.f_movie_id                    AS movie_id,
+                movie.f_movie_name                  AS movie_name,
+                movie.f_movie_age_restrictions      AS movie_age_restrictions,
+                movie.f_movie_time                  AS movie_time
+            FROM
+                t_movie_manages     AS manage
+            JOIN
+                t_movies            AS movie
+            ON
+                manage.f_movie_id = movie.f_movie_id
+            JOIN
+                t_theaters          AS theater
+            ON
+                manage.f_theater_id = theater.f_theater_id";
 }
 
 ?>

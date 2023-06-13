@@ -50,11 +50,12 @@ class ManagesController extends Controller{
     // idで抽出
     private function getById($id):array{
         // sql
-        $sql_movie  = $this->select_movies . "   WHERE manage.f_movie_id = :id";
+        $sql_movie  = Sql::SelectSchedules . "   WHERE manage.f_movie_id = :id";
         $sql_types  = Sql::SelectTypes . "   WHERE handling.f_movie_id = :id";
         $sql_images = Sql::SelectImages . "   WHERE f_movie_id = :id";
 
-        $res_movie  = parent::selectById($sql_movie, $id)[0];  // 映画TBL検索
+        // $res_movie  = parent::selectById($sql_movie, $id)[0];  // 映画TBL検索
+        $res_movie  = parent::selectScheduleById($sql_movie, $id)[0];  // 映画TBL検索
         $res_types  = parent::selectById($sql_types, $id);     // 上映種別TBL検索
         $res_images = parent::selectById($sql_images, $id);    // 画像TBL検索
 

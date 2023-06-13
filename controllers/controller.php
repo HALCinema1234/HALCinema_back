@@ -1,4 +1,5 @@
 <?php
+
 class Controller{
 
     public $code = 200;
@@ -54,7 +55,19 @@ class Controller{
         $sourses->bindparam(':id', $id, PDO::PARAM_INT);
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
+    }
 
+    // スケジュール検索
+    protected function selectScheduleById($sql, $id):array{
+        // 上映開始までの広告上映の長さ
+        $advertisingTime = Config::AdvertisingTime;
+
+        $sourses = $this->db->connect()->prepare($sql);
+        $sourses->bindValue(':time1', $advertisingTime, PDO::PARAM_INT);
+        $sourses->bindValue(':time2', $advertisingTime, PDO::PARAM_INT);
+        $sourses->bindValue(':id', $id, PDO::PARAM_INT);
+        $sourses->execute();
+        return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
