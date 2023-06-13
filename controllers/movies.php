@@ -33,7 +33,7 @@ class MoviesController extends Controller{
         }
 
         foreach($res_images as $res_image){
-            array_push( $res_movie["images"], parent::encode_image($res_image['image_url']) );
+            array_push( $res_movie["images"], parent::url_image($res_image['image_url']));
         }
 
         if($res_movie){
@@ -70,7 +70,7 @@ class MoviesController extends Controller{
 
             foreach($res_images as $res_image){
                 if($res_movies[$cnt]["id"] == $res_image['id']){
-                    array_push($res_movies[$cnt]["images"], $this->encode_image($res_image['image_url']));
+                    array_push($res_movies[$cnt]["images"], $this->url_image($res_image['image_url']));
                 }
             }
 

@@ -67,7 +67,7 @@ class ManagesController extends Controller{
         }
 
         foreach($res_images as $res_image){
-            array_push( $res_movie["movie_images"], parent::encode_image($res_image['image_url']) );
+            array_push( $res_movie["movie_images"], parent::url_image($res_image['image_url']) );
         }
 
         if($res_movie){
