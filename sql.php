@@ -81,8 +81,9 @@ class Sql{
                     WHEN 2 THEN '中'
                     ELSE '小'
                 END                                 AS theater_type_name,
-                movie.f_movie_id                    AS movie_id,
+                manage.f_movie_id                   AS movie_id,
                 movie.f_movie_name                  AS movie_name,
+                type.f_movie_type_name              AS movie_type,
                 movie.f_movie_age_restrictions      AS movie_age_restrictions,
                 movie.f_movie_time                  AS movie_time
             FROM
@@ -91,6 +92,10 @@ class Sql{
                 t_movies            AS movie
             ON
                 manage.f_movie_id = movie.f_movie_id
+            JOIN
+                t_movie_types       AS type
+            ON
+                manage.f_movie_type_id = type.f_movie_type_id
             JOIN
                 t_theaters          AS theater
             ON

@@ -21,13 +21,13 @@ class ManagesController extends Controller{
         $res_images = parent::selectById(Sql::SelectImagesById, $id);               // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
-        $res_manage["movie_types"]       = array();
+        // $res_manage["movie_types"]       = array();
         $res_manage["movie_images"]      = array();
         $res_manage["advertising_time"]  = Config::AdvertisingTime;
 
-        foreach($res_types as $res_type){
-            array_push( $res_manage["movie_types"], $res_type['name'] );
-        }
+        // foreach($res_types as $res_type){
+        //     array_push( $res_manage["movie_types"], $res_type['name'] );
+        // }
 
         foreach($res_images as $res_image){
             array_push( $res_manage["movie_images"], parent::url_image($res_image['image_url']) );
@@ -52,15 +52,15 @@ class ManagesController extends Controller{
         // 映画情報と上映種別情報と画像情報の連結
         $cnt = 0;
         while(count($res_manages) > $cnt){
-            $res_manages[$cnt]["movie_types"]       = array();
+            // $res_manages[$cnt]["movie_types"]       = array();
             $res_manages[$cnt]["movie_images"]      = array();
             $res_manages[$cnt]["advertising_time"]  = Config::AdvertisingTime;
 
-            foreach($res_types as $res_type){
-                if($res_manages[$cnt]["movie_id"] == $res_type["id"]){
-                    array_push($res_manages[$cnt]["movie_types"], $res_type["name"]);
-                }
-            }
+            // foreach($res_types as $res_type){
+            //     if($res_manages[$cnt]["movie_id"] == $res_type["id"]){
+            //         array_push($res_manages[$cnt]["movie_types"], $res_type["name"]);
+            //     }
+            // }
 
             foreach($res_images as $res_image){
                 if($res_manages[$cnt]["movie_id"] == $res_image["id"]){

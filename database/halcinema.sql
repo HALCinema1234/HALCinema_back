@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: 127.0.0.1
--- 生成日時: 2023-06-13 18:11:53
+-- 生成日時: 2023-06-14 14:02:29
 -- サーバのバージョン： 10.4.21-MariaDB
 -- PHP のバージョン: 8.0.12
 
@@ -113,6 +113,7 @@ INSERT INTO `t_movie_images` (`f_movie_image_id`, `f_movie_id`, `f_movie_image_u
 CREATE TABLE `t_movie_manages` (
   `f_movie_manage_id` int(11) NOT NULL,
   `f_movie_id` int(11) NOT NULL,
+  `f_movie_type_id` int(11) NOT NULL,
   `f_movie_manage_day` date NOT NULL,
   `f_movie_manage_start_time` time NOT NULL,
   `f_theater_id` int(11) NOT NULL
@@ -122,8 +123,8 @@ CREATE TABLE `t_movie_manages` (
 -- テーブルのデータのダンプ `t_movie_manages`
 --
 
-INSERT INTO `t_movie_manages` (`f_movie_manage_id`, `f_movie_id`, `f_movie_manage_day`, `f_movie_manage_start_time`, `f_theater_id`) VALUES
-(1, 1, '2023-06-09', '09:00:00', 1);
+INSERT INTO `t_movie_manages` (`f_movie_manage_id`, `f_movie_id`, `f_movie_type_id`, `f_movie_manage_day`, `f_movie_manage_start_time`, `f_theater_id`) VALUES
+(1, 1, 1, '2023-06-09', '09:00:00', 1);
 
 -- --------------------------------------------------------
 
