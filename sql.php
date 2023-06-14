@@ -16,6 +16,9 @@ class Sql{
             f_movie_time                AS time
         FROM
             t_movies";
+    
+    const SelectMoviesById  = Sql::SelectMovies . "   WHERE f_movie_id = :id";
+    const SelectMoviesAll   = Sql::SelectMovies . "    ORDER BY id";
 
     // =====================================================================
     // 上映種別
@@ -30,6 +33,9 @@ class Sql{
             t_movie_types as type
         ON
             handling.f_movie_type_id = type.f_movie_type_id";
+    
+    const SelectTypesById   = Sql::SelectTypes . "   WHERE handling.f_movie_id = :id";
+    const SelectTypesAll    = Sql::SelectTypes . "    ORDER BY id";
 
     // =====================================================================
     // 映画画像
@@ -42,7 +48,8 @@ class Sql{
             t_movie_images";
     
     const SelectImagesById = Sql::SelectImages . "   WHERE f_movie_id = :id";
-    
+    const SelectImagesAll  = Sql::SelectImages . "    ORDER BY id";
+
     // =====================================================================
     // 券種
     // =====================================================================
@@ -53,8 +60,6 @@ class Sql{
                 f_ticket_price  As price
             FROM
                 t_tickets";
-    
-    const SelectTypesById = Sql::SelectTypes . "   WHERE handling.f_movie_id = :id";
 
     // =====================================================================
     // 上映スケジュール

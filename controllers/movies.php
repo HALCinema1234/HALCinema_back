@@ -15,14 +15,9 @@ class MoviesController extends Controller{
 
     // idで抽出
     private function getById($id):array{
-        // sql
-        $sql_movie  = Sql::SelectMovies . "   WHERE f_movie_id = :id";
-        $sql_type   = Sql::SelectTypes . "   WHERE handling.f_movie_id = :id";
-        $sql_image  = Sql::SelectImages . "   WHERE f_movie_id = :id";
-
-        $res_movie  = parent::selectById($sql_movie, $id)[0];    // 映画TBL検索
-        $res_types  = parent::selectById($sql_type, $id);        // 上映種別TBL検索
-        $res_images = parent::selectById($sql_image, $id);      // 画像TBL検索
+        $res_movie  = parent::selectById(Sql::SelectMoviesById, $id)[0];    // 映画TBL検索
+        $res_types  = parent::selectById(Sql::SelectTypesById, $id);        // 上映種別TBL検索
+        $res_images = parent::selectById(Sql::SelectImagesById, $id);       // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $res_movie["types"]     = array();
@@ -47,14 +42,9 @@ class MoviesController extends Controller{
 
     // すべて
     private function getAll():array{
-        // sql
-        $sql_movies  = Sql::SelectMovies . "    ORDER BY id";
-        $sql_types   = Sql::SelectTypes . "    ORDER BY id";
-        $sql_images  = Sql::SelectImages . "    ORDER BY id";
-
-        $res_movies = parent::select($sql_movies);   // 映画TBL検索
-        $res_types  = parent::select($sql_types);    // 上映種別TBL検索
-        $res_images = parent::select($sql_images);   // 画像TBL検索
+        $res_movies = parent::select(Sql::SelectMoviesAll);   // 映画TBL検索
+        $res_types  = parent::select(Sql::SelectTypesAll);    // 上映種別TBL検索
+        $res_images = parent::select(Sql::SelectImagesAll);   // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $cnt = 0;
