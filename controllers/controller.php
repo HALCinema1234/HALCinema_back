@@ -9,13 +9,13 @@ class Controller{
 
     // コンストラクター
     function __construct(){
-        $this->scheme         = empty($_SERVER['HTTPS'])? 'http://': 'https://';
-        $this->host           = $_SERVER['HTTP_HOST'];
-        $this->path           = mb_substr($_SERVER['SCRIPT_NAME'], 0, -9);
+        $this->scheme         = empty($_SERVER["HTTPS"])? "http://": "https://";
+        $this->host           = $_SERVER["HTTP_HOST"];
+        $this->path           = mb_substr($_SERVER["SCRIPT_NAME"], 0, -9);
         $this->controller     = basename(__FILE__, ".php");
 
         $this->url          =  $this->scheme . $this->host . $this->path .  $this->controller . "/";
-        $this->request_body = json_decode( $this->encode_utf8('php://input'), true );
+        $this->request_body = json_decode( $this->encode_utf8("php://input"), true );
         $this->db           = new DB();
     }
 
@@ -52,19 +52,30 @@ class Controller{
     // ID検索
     protected function selectById($sql, $id):array{
         $sourses = $this->db->connect()->prepare($sql);
-        $sourses->bindparam(':id', $id, PDO::PARAM_INT);
+        $sourses->bindparam(":id", $id, PDO::PARAM_INT);
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // スケジュール検索
-    protected function selectScheduleById($sql, $id):array{
+    protected function selectSchedulesAll($sql):array{
         // 上映開始までの広告上映の長さ
         $advertisingTime = Config::AdvertisingTime;
 
         $sourses = $this->db->connect()->prepare($sql);
-        $sourses->bindValue(':time', $advertisingTime, PDO::PARAM_INT);
-        $sourses->bindValue(':id', $id, PDO::PARAM_INT);
+        $sourses->bindValue(":time", $advertisingTime, PDO::PARAM_INT);
+        $sourses->execute();
+        return $sourses->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // スケジュール検索
+    protected function selectSchedulesById($sql, $id):array{
+        // 上映開始までの広告上映の長さ
+        $advertisingTime = Config::AdvertisingTime;
+
+        $sourses = $this->db->connect()->prepare($sql);
+        $sourses->bindValue(":time", $advertisingTime, PDO::PARAM_INT);
+        $sourses->bindValue(":id", $id, PDO::PARAM_INT);
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
