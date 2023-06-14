@@ -1,6 +1,9 @@
 <?php
 
 class Sql{
+    // =====================================================================
+    // 映画情報
+    // =====================================================================
     const SelectMovies = "
         SELECT
             f_movie_id                  AS id,
@@ -14,6 +17,9 @@ class Sql{
         FROM
             t_movies";
 
+    // =====================================================================
+    // 上映種別
+    // =====================================================================
     const SelectTypes = "
         SELECT
             handling.f_movie_id         AS id,
@@ -25,6 +31,9 @@ class Sql{
         ON
             handling.f_movie_type_id = type.f_movie_type_id";
 
+    // =====================================================================
+    // 映画画像
+    // =====================================================================
     const SelectImages = "
         SELECT
             f_movie_id          AS id,
@@ -32,6 +41,11 @@ class Sql{
         FROM
             t_movie_images";
     
+    const SelectImagesById = Sql::SelectImages . "   WHERE f_movie_id = :id";
+    
+    // =====================================================================
+    // 券種
+    // =====================================================================
     const SelectTickets = "
             SELECT
                 f_ticket_id     AS id,
@@ -39,7 +53,12 @@ class Sql{
                 f_ticket_price  As price
             FROM
                 t_tickets";
+    
+    const SelectTypesById = Sql::SelectTypes . "   WHERE handling.f_movie_id = :id";
 
+    // =====================================================================
+    // 上映スケジュール
+    // =====================================================================
     const SelectSchedules = "
             SELECT
                 manage.f_movie_manage_id            AS id,
@@ -47,10 +66,9 @@ class Sql{
                 manage.f_movie_manage_start_time    AS start,
                 DATE_ADD(
                     manage.f_movie_manage_start_time,
-                    INTERVAL CEIL(movie.f_movie_time/10)*10 + :time1 MINUTE
+                    INTERVAL CEIL(movie.f_movie_time/10)*10 + :time MINUTE
                 )                                   AS end,
                 CEIL(movie.f_movie_time/10)*10      AS screening_time,
-                :time2                              AS advertising_time,
                 manage.f_theater_id                 AS theater_id,
                 theater.f_theater_type              AS theater_type,
                 CASE theater.f_theater_type
@@ -72,6 +90,8 @@ class Sql{
                 t_theaters          AS theater
             ON
                 manage.f_theater_id = theater.f_theater_id";
+
+    const SelectSchedulesById  = Sql::SelectSchedules . "   WHERE manage.f_movie_id = :id";
 }
 
 ?>

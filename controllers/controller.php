@@ -63,8 +63,7 @@ class Controller{
         $advertisingTime = Config::AdvertisingTime;
 
         $sourses = $this->db->connect()->prepare($sql);
-        $sourses->bindValue(':time1', $advertisingTime, PDO::PARAM_INT);
-        $sourses->bindValue(':time2', $advertisingTime, PDO::PARAM_INT);
+        $sourses->bindValue(':time', $advertisingTime, PDO::PARAM_INT);
         $sourses->bindValue(':id', $id, PDO::PARAM_INT);
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
