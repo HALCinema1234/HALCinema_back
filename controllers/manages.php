@@ -16,9 +16,9 @@ class ManagesController extends Controller{
 
     // idで抽出
     private function getById($id):array{
-        $res_manage  = parent::selectSchedulesById(Sql::SelectSchedulesById, $id)[0]; // 映画TBL検索
-        $res_types  = parent::selectById(Sql::SelectTypesById, $id);                // 上映種別TBL検索
-        $res_images = parent::selectById(Sql::SelectImagesById, $id);               // 画像TBL検索
+        $res_manage = $this->selectSchedulesById($id)[0];               // 上映管理TBL検索
+        $res_types  = parent::selectById(Sql::SelectTypesById, $id);    // 上映種別TBL検索
+        $res_images = parent::selectById(Sql::SelectImagesById, $id);   // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $res_manage["movie_types"]       = array();
@@ -45,9 +45,9 @@ class ManagesController extends Controller{
     
     // すべて取得
     private function getAll():array{
-        $res_manages  = parent::selectSchedulesAll(Sql::SelectSchedules);   // 映画TBL検索
-        $res_types  = parent::select(Sql::SelectTypesAll);                  // 上映種別TBL検索
-        $res_images = parent::select(Sql::SelectImagesAll);                 // 画像TBL検索
+        $res_manages  = $this->selectSchedulesAll();            // 上映管理TBL検索
+        $res_types  = parent::select(Sql::SelectTypesAll);      // 上映種別TBL検索
+        $res_images = parent::select(Sql::SelectImagesAll);     // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $cnt = 0;
@@ -78,6 +78,29 @@ class ManagesController extends Controller{
             $this->code = 500;
             return ["error" => [ "type" => "fatal_error" ]];
         }
+    }
+
+    // スケジュール検索
+    private function selectSchedulesAll():array{
+        // 上映開始までの広告上映の長さ
+        $advertisingTime = Config::AdvertisingTime;
+
+        $sourses = $this->db->connect()->prepare(Sql::SelectSchedules);
+        $sourses->bindValue(":time", $advertisingTime, PDO::PARAM_INT);
+        $sourses->execute();
+        return $sourses->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // スケジュール検索
+    private function selectSchedulesById($id):array{
+        // 上映開始までの広告上映の長さ
+        $advertisingTime = Config::AdvertisingTime;
+
+        $sourses = $this->db->connect()->prepare(Sql::SelectSchedulesById);
+        $sourses->bindValue(":time", $advertisingTime, PDO::PARAM_INT);
+        $sourses->bindValue(":id", $id, PDO::PARAM_INT);
+        $sourses->execute();
+        return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 

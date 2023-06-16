@@ -5,7 +5,8 @@ class Controller{
     public $code = 200;
     public $url, $request_body;
 
-    private $scheme, $host, $path, $controller, $db;
+    private $scheme, $host, $path, $controller;
+    protected $db;
 
     // コンストラクター
     function __construct(){
@@ -57,28 +58,28 @@ class Controller{
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // スケジュール検索
-    protected function selectSchedulesAll($sql):array{
-        // 上映開始までの広告上映の長さ
-        $advertisingTime = Config::AdvertisingTime;
+    // // スケジュール検索
+    // protected function selectSchedulesAll($sql):array{
+    //     // 上映開始までの広告上映の長さ
+    //     $advertisingTime = Config::AdvertisingTime;
 
-        $sourses = $this->db->connect()->prepare($sql);
-        $sourses->bindValue(":time", $advertisingTime, PDO::PARAM_INT);
-        $sourses->execute();
-        return $sourses->fetchAll(PDO::FETCH_ASSOC);
-    }
+    //     $sourses = $this->db->connect()->prepare($sql);
+    //     $sourses->bindValue(":time", $advertisingTime, PDO::PARAM_INT);
+    //     $sourses->execute();
+    //     return $sourses->fetchAll(PDO::FETCH_ASSOC);
+    // }
 
-    // スケジュール検索
-    protected function selectSchedulesById($sql, $id):array{
-        // 上映開始までの広告上映の長さ
-        $advertisingTime = Config::AdvertisingTime;
+    // // スケジュール検索
+    // protected function selectSchedulesById($sql, $id):array{
+    //     // 上映開始までの広告上映の長さ
+    //     $advertisingTime = Config::AdvertisingTime;
 
-        $sourses = $this->db->connect()->prepare($sql);
-        $sourses->bindValue(":time", $advertisingTime, PDO::PARAM_INT);
-        $sourses->bindValue(":id", $id, PDO::PARAM_INT);
-        $sourses->execute();
-        return $sourses->fetchAll(PDO::FETCH_ASSOC);
-    }
+    //     $sourses = $this->db->connect()->prepare($sql);
+    //     $sourses->bindValue(":time", $advertisingTime, PDO::PARAM_INT);
+    //     $sourses->bindValue(":id", $id, PDO::PARAM_INT);
+    //     $sourses->execute();
+    //     return $sourses->fetchAll(PDO::FETCH_ASSOC);
+    // }
 }
 
 ?>
