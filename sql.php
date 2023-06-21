@@ -23,19 +23,33 @@ class Sql{
     // =====================================================================
     // 上映種別
     // =====================================================================
-    const SelectTypes = "
+    const SelectMovieTypes = "
         SELECT
             handling.f_movie_id         AS id,
             type.f_movie_type_name      AS name
         FROM
-            t_handling_movie_types as handling
+            t_handling_movies_types as handling
         JOIN
             t_movie_types as type
         ON
             handling.f_movie_type_id = type.f_movie_type_id";
     
-    const SelectTypesById   = Sql::SelectTypes . "   WHERE handling.f_movie_id = :id";
-    const SelectTypesAll    = Sql::SelectTypes . "    ORDER BY id";
+    const SelectMovieTypesById   = Sql::SelectMovieTypes . "   WHERE handling.f_movie_id = :id";
+    const SelectMovieTypesAll    = Sql::SelectMovieTypes . "    ORDER BY id";
+
+    const SelectManageTypes = "
+    SELECT
+        handling.f_movie_manage_id  AS id,
+        type.f_movie_type_name      AS name
+    FROM
+        t_handling_manages_types as handling
+    JOIN
+        t_movie_types as type
+    ON
+        handling.f_movie_type_id = type.f_movie_type_id";
+
+    const SelectManageTypesById   = Sql::SelectManageTypes . "   WHERE handling.f_movie_manage_id = :id";
+    const SelectManageTypesAll    = Sql::SelectManageTypes . "    ORDER BY id";
 
     // =====================================================================
     // 映画画像
@@ -81,7 +95,7 @@ class Sql{
                     WHEN 2 THEN '中'
                     ELSE '小'
                 END                                 AS theater_type_name,
-                movie.f_movie_id                    AS movie_id,
+                manage.f_movie_id                   AS movie_id,
                 movie.f_movie_name                  AS movie_name,
                 movie.f_movie_age_restrictions      AS movie_age_restrictions,
                 movie.f_movie_time                  AS movie_time

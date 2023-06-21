@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: 127.0.0.1
--- 生成日時: 2023-06-13 18:11:53
+-- 生成日時: 2023-06-16 16:03:45
 -- サーバのバージョン： 10.4.21-MariaDB
 -- PHP のバージョン: 8.0.12
 
@@ -24,19 +24,30 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `t_handling_movie_types`
+-- テーブルの構造 `t_handling_manages_types`
 --
 
-CREATE TABLE `t_handling_movie_types` (
+CREATE TABLE `t_handling_manages_types` (
+  `f_movie_manage_id` int(11) NOT NULL,
+  `f_movie_type_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `t_handling_movies_types`
+--
+
+CREATE TABLE `t_handling_movies_types` (
   `f_movie_id` int(11) NOT NULL,
   `f_movie_type_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- テーブルのデータのダンプ `t_handling_movie_types`
+-- テーブルのデータのダンプ `t_handling_movies_types`
 --
 
-INSERT INTO `t_handling_movie_types` (`f_movie_id`, `f_movie_type_id`) VALUES
+INSERT INTO `t_handling_movies_types` (`f_movie_id`, `f_movie_type_id`) VALUES
 (1, 1),
 (2, 1),
 (3, 1),
@@ -97,12 +108,12 @@ CREATE TABLE `t_movie_images` (
 --
 
 INSERT INTO `t_movie_images` (`f_movie_image_id`, `f_movie_id`, `f_movie_image_url`) VALUES
-(1, 1, 'images/monday.jpg'),
-(2, 2, 'images/woman_talking.jpg'),
-(3, 3, 'images/WBC.jpg'),
-(4, 4, 'images/monster.jpg'),
-(5, 5, 'images/creed_3.jpg'),
-(6, 6, 'images/rohan_an_louvre.jpg');
+(1, 1, 'monday.jpg'),
+(2, 2, 'woman_talking.jpg'),
+(3, 3, 'WBC.jpg'),
+(4, 4, 'monster.jpg'),
+(5, 5, 'creed_3.jpg'),
+(6, 6, 'rohan_an_louvre.jpg');
 
 -- --------------------------------------------------------
 
@@ -198,9 +209,17 @@ INSERT INTO `t_tickets` (`f_ticket_id`, `f_ticket_name`, `f_ticket_price`) VALUE
 --
 
 --
--- テーブルのインデックス `t_handling_movie_types`
+-- テーブルのインデックス `t_handling_manages_types`
 --
-ALTER TABLE `t_handling_movie_types`
+ALTER TABLE `t_handling_manages_types`
+  ADD PRIMARY KEY (`f_movie_manage_id`,`f_movie_type_id`),
+  ADD KEY `f_movie_manage_id` (`f_movie_manage_id`),
+  ADD KEY `f_movie_type_id` (`f_movie_type_id`);
+
+--
+-- テーブルのインデックス `t_handling_movies_types`
+--
+ALTER TABLE `t_handling_movies_types`
   ADD PRIMARY KEY (`f_movie_id`,`f_movie_type_id`),
   ADD KEY `f_movie_id` (`f_movie_id`),
   ADD KEY `f_movie_type_id` (`f_movie_type_id`);
@@ -289,11 +308,18 @@ ALTER TABLE `t_tickets`
 --
 
 --
--- テーブルの制約 `t_handling_movie_types`
+-- テーブルの制約 `t_handling_manages_types`
 --
-ALTER TABLE `t_handling_movie_types`
-  ADD CONSTRAINT `t_handling_movie_types_ibfk_1` FOREIGN KEY (`f_movie_id`) REFERENCES `t_movies` (`f_movie_id`),
-  ADD CONSTRAINT `t_handling_movie_types_ibfk_2` FOREIGN KEY (`f_movie_type_id`) REFERENCES `t_movie_types` (`f_movie_type_id`);
+ALTER TABLE `t_handling_manages_types`
+  ADD CONSTRAINT `t_handling_manages_types_ibfk_1` FOREIGN KEY (`f_movie_manage_id`) REFERENCES `t_movie_manages` (`f_movie_manage_id`),
+  ADD CONSTRAINT `t_handling_manages_types_ibfk_2` FOREIGN KEY (`f_movie_type_id`) REFERENCES `t_movie_types` (`f_movie_type_id`);
+
+--
+-- テーブルの制約 `t_handling_movies_types`
+--
+ALTER TABLE `t_handling_movies_types`
+  ADD CONSTRAINT `t_handling_movies_types_ibfk_1` FOREIGN KEY (`f_movie_id`) REFERENCES `t_movies` (`f_movie_id`),
+  ADD CONSTRAINT `t_handling_movies_types_ibfk_2` FOREIGN KEY (`f_movie_type_id`) REFERENCES `t_movie_types` (`f_movie_type_id`);
 
 --
 -- テーブルの制約 `t_movie_images`

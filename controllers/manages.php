@@ -16,9 +16,9 @@ class ManagesController extends Controller{
 
     // idで抽出
     private function getById($id):array{
-        $res_manage = $this->selectSchedulesById(Sql::SelectSchedulesById, $id)[0]; // 映画TBL検索
-        $res_types  = parent::selectById(Sql::SelectTypesById, $id);                // 上映種別TBL検索
-        $res_images = parent::selectById(Sql::SelectImagesById, $id);               // 画像TBL検索
+        $res_manage = $this->selectSchedulesById($id)[0];                                   // 上映管理TBL検索
+        $res_types  = parent::selectById(Sql::SelectManageTypesById, $res_manage["id"]);    // 上映種別TBL検索
+        $res_images = parent::selectById(Sql::SelectImagesById, $id);                       // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $res_manage["movie_types"]       = array();
@@ -45,9 +45,9 @@ class ManagesController extends Controller{
     
     // すべて取得
     private function getAll():array{
-        $res_manages    = $this->selectSchedulesAll();            // 上映管理TBL検索
-        $res_types      = parent::select(Sql::SelectTypesAll);      // 上映種別TBL検索
-        $res_images     = parent::select(Sql::SelectImagesAll);     // 画像TBL検索
+        $res_manages    = $this->selectSchedulesAll();                  // 上映管理TBL検索
+        $res_types      = parent::select(Sql::SelectManageTypesAll);    // 上映種別TBL検索
+        $res_images     = parent::select(Sql::SelectImagesAll);         // 画像TBL検索
 
         // 映画情報と上映種別情報と画像情報の連結
         $cnt = 0;
