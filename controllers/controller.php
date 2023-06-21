@@ -27,9 +27,9 @@ class Controller{
     //     return $enc_img;
     // }
 
-    // 画像をbase64へエンコード
+    // 画像URLの取得
     protected function url_image($img_url):string{
-        return $this->scheme . $this->host . $this->path . $_ENV["IMG_FOLDER"] . $img_url;
+        return $this->scheme . $this->host . $this->path . Env::IMG_FOLDER . $img_url;
     }
 
     // ファイルをutf8へエンコード

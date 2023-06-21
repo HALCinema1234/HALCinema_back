@@ -1,11 +1,12 @@
 <?php
 // 環境変数の読込
-require_once('vendor/autoload.php');
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env.local');
-$dotenv->load();
+// require_once('vendor/autoload.php');
+// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env.local');
+// $dotenv->load();
 
-include(__DIR__ . "/Db.php");
+include(__DIR__ . "/Env.php");
 include(__DIR__ . "/sql.php");
+include(__DIR__ . "/Db.php");
 include(__DIR__ . "/controllers/controller.php");
 
 // =============================================================================

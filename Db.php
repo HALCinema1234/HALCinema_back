@@ -5,13 +5,14 @@ class Db{
     // ==============================================================================
     function connect(){
         try{
-            $dsn = "mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']};charset=utf8;port={$_ENV['DB_PORT']}";
+            // $dsn = "mysql:host={$_Env['DB_HOST']};dbname={$_Env['DB_NAME']};charset=utf8;port={$_Env['DB_PORT']}";
+            $dsn = "mysql:host=". Env::DB_HOST . ";dbname=" . Env::DB_NAME . ";charset=utf8;port=" . Env::DB_PORT;
             $driver_option = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_EMULATE_PREPARES => false,
             ];
 
-            $db = new PDO($dsn, $_ENV["DB_ID"], $_ENV['DB_PASS'], $driver_option);
+            $db = new PDO($dsn, Env::DB_ID, Env::DB_PASS, $driver_option);
         }
         catch( PDOException $e ){
             header("Content-Type: application/json; charset=utf-8", true, 500);

@@ -9,12 +9,12 @@
 |-------------------|---------|
 | php               | 8.0.12  |
 | composer          | 2.4.1   |
-| vlucas/phpdotenv  | 5.5     |
+| ~~vlucas/phpdotenv~~  | ~~5.5~~     |
 | mysql             | 15.1    |
 
-.env.localで環境変数を設定しています。  
- - 適宜、.env.local.defaltをコピーし、.env.localを作成・編集してください。
- - .envファイルを運用するためにphpdotenvが必要です。composerをインストール後、phpdotenvを取得してください。
+~~.env.localで環境変数を設定しています。~~
+~~ - 適宜、.env.local.defaltをコピーし、.env.localを作成・編集してください。~~
+~~ - .envファイルを運用するためにphpdotenvが必要です。composerをインストール後、phpdotenvを取得してください。~~
 
 ## 設計
 
