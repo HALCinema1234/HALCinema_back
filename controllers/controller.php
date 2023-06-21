@@ -5,7 +5,8 @@ class Controller{
     public $code = 200;
     public $url, $request_body;
 
-    private $scheme, $host, $path, $controller, $db;
+    private $scheme, $host, $path, $controller;
+    protected $db;
 
     // コンストラクター
     function __construct(){

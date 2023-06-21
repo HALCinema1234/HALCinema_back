@@ -16,7 +16,7 @@ class ManagesController extends Controller{
 
     // idで抽出
     private function getById($id):array{
-        $res_manage  = parent::selectSchedulesById(Sql::SelectSchedulesById, $id)[0]; // 映画TBL検索
+        $res_manage = $this->selectSchedulesById(Sql::SelectSchedulesById, $id)[0]; // 映画TBL検索
         $res_types  = parent::selectById(Sql::SelectTypesById, $id);                // 上映種別TBL検索
         $res_images = parent::selectById(Sql::SelectImagesById, $id);               // 画像TBL検索
 
