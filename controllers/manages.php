@@ -23,7 +23,7 @@ class ManagesController extends Controller{
         // 映画情報と上映種別情報と画像情報の連結
         $res_manage["movie_types"]       = array();
         $res_manage["movie_images"]      = array();
-        $res_manage["advertising_time"]  = (int) $_ENV["AD_TIME"];
+        $res_manage["advertising_time"]  = (int) Env::AD_TIME;
 
         foreach($res_types as $res_type){
             array_push( $res_manage["movie_types"], $res_type['name'] );
@@ -54,7 +54,7 @@ class ManagesController extends Controller{
         while(count($res_manages) > $cnt){
             $res_manages[$cnt]["movie_types"]       = array();
             $res_manages[$cnt]["movie_images"]      = array();
-            $res_manages[$cnt]["advertising_time"]  = (int) $_ENV["AD_TIME"];
+            $res_manages[$cnt]["advertising_time"]  = (int) Env::AD_TIME;
 
             foreach($res_types as $res_type){
                 if($res_manages[$cnt]["movie_id"] == $res_type["id"]){
@@ -83,7 +83,7 @@ class ManagesController extends Controller{
     // スケジュール検索
     private function selectSchedulesAll():array{
         $sourses = $this->db->connect()->prepare(Sql::SelectSchedules);
-        $sourses->bindValue(":time", $_ENV["AD_TIME"], PDO::PARAM_INT);
+        $sourses->bindValue(":time", Env::AD_TIME, PDO::PARAM_INT);
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -91,7 +91,7 @@ class ManagesController extends Controller{
     // スケジュール検索
     private function selectSchedulesById($id):array{
         $sourses = $this->db->connect()->prepare(Sql::SelectSchedulesById);
-        $sourses->bindValue(":time", $_ENV["AD_TIME"], PDO::PARAM_INT);
+        $sourses->bindValue(":time", Env::AD_TIME, PDO::PARAM_INT);
         $sourses->bindValue(":id", $id, PDO::PARAM_INT);
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
