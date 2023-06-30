@@ -17,8 +17,8 @@
 ~~適宜、.env.local.defalt をコピーし、.env.local を作成・編集してください。~~
 ~~.env ファイルを運用するために phpdotenv が必要です。composer をインストール後、phpdotenv を取得してください。~~
 
-**Env.php で環境変数を設定しています。**
-**適宜、.env.local.defalt をコピーし、.env.local を作成・編集してください。**
+* **Env.php で環境変数を設定しています。**
+* **適宜、.Env.defalt.php をコピーし、Env.php を作成・編集してください。**
 
 ## 設計
 
