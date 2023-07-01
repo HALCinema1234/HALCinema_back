@@ -1110,6 +1110,18 @@ ALTER TABLE `t_handling_movies_types`
   ADD PRIMARY KEY (`f_movie_id`,`f_movie_type_id`),
   ADD KEY `f_movie_id` (`f_movie_id`),
   ADD KEY `f_movie_type_id` (`f_movie_type_id`);
+  
+--
+-- テーブルのインデックス `t_jobs`
+--
+ALTER TABLE `t_jobs`
+  ADD PRIMARY KEY (`f_job_id`);
+
+--
+-- テーブルのインデックス `t_members`
+--
+ALTER TABLE `t_members`
+  ADD PRIMARY KEY (`f_member_id`);
 
 --
 -- テーブルのインデックス `t_movies`
