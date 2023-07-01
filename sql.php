@@ -10,6 +10,7 @@ class Sql
         SELECT
             movie.f_movie_id            AS id,
             movie.f_movie_name          AS title,
+            movie.f_movie_start_day     AS start,
             image.f_movie_image_url     AS thumbnail,
             CASE
                 WHEN f_movie_start_day < now() THEN true
@@ -26,7 +27,7 @@ class Sql
             image.f_movie_image_thumbnail = 1
         AND
             f_movie_end_day > NOW()
-        ORDER BY id";
+        ORDER BY start";
 
     const SelectMoviesById = "
         SELECT
@@ -169,6 +170,35 @@ class Sql
     // =====================================================================
     // 予約
     // =====================================================================
+    const SelectReservesById = "
+        SELECT
+            f_reserve_id            AS id,
+            f_movie_manage_id       AS manage_id,
+            f_reserve_date          AS date,
+            f_member_id             AS member_id,
+            f_reserve_delegate_name AS name,
+            f_reserve_delegate_tel  AS tel,
+            f_reserve_delegate_mail AS mail
+        FROM
+            t_reserves
+        WHERE
+            f_member_id = :id
+        ORDER BY
+            date DESC
+        LIMIT 1
+    ";
+
+    const SelectReserveSeatsById = "
+        SELECT
+            f_reserve_seat_name     AS name,
+            f_ticket_id             AS ticket
+        FROM
+            t_reserve_seats
+        WHERE
+            f_reserve_id = :id
+    ";
+
+
     const InsertReserves = "
         INSERT INTO
             t_reserves
@@ -176,12 +206,34 @@ class Sql
                 f_movie_manage_id,
                 f_reserve_date,
                 f_member_id
+                f_reserve_delegate_name,
+                f_reserve_delegate_tel,
+                f_reserve_delegate_mail
             )
         VALUES
             (
                 :manage_id,
                 NOW(),
-                :member_id
+                :member_id,
+                NULL,
+                NULL,
+                NULL
+            );
+    ";
+
+    const InsertReserveSeats = "
+        INSERT INTO
+            t_reserve_seats
+            (
+                f_reserve_id,
+                f_reserve_seat_name,
+                f_ticket_id
+            )
+        VALUES
+            (
+                :id,
+                :name,
+                :ticket
             );
     ";
 }

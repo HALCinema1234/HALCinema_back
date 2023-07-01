@@ -31,11 +31,11 @@ class LoginController extends Controller
             return ["error" => ["type" => "invalid_param"]];
         }
 
-        if ($res_seats) {
-            return $res_seats;
-        } else {
-            $this->code = 500;
-            return ["error" => ["type" => "fatal_error"]];
-        }
+        // if ($res_seats) {
+        //     return $res_seats;
+        // } else {
+        //     $this->code = 500;
+        //     return ["error" => ["type" => "fatal_error"]];
+        // }
     }
 }
