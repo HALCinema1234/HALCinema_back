@@ -93,7 +93,7 @@ class MoviesController extends Controller
     // スケジュール検索
     private function selectSchedulesById($id): array
     {
-        $sourses = $this->db->connect()->prepare(Sql::SelectSchedulesById);
+        $sourses = parent::connectDb()->prepare(Sql::SelectSchedulesById);
         $sourses->bindValue(":time1", Env::AD_TIME, PDO::PARAM_INT);
         $sourses->bindValue(":time2", Env::AD_TIME, PDO::PARAM_INT);
         $sourses->bindValue(":id", $id, PDO::PARAM_INT);

@@ -6,8 +6,7 @@ class Controller
     public $code = 200;
     public $url, $request_body;
 
-    private $controller;
-    protected $scheme, $host, $path, $db;
+    private $scheme, $host, $path, $controller, $db;
 
     // コンストラクター
     function __construct()
@@ -20,6 +19,12 @@ class Controller
         $this->url          =  $this->scheme . $this->host . $this->path .  $this->controller . "/";
         $this->request_body = json_decode($this->encode_utf8("php://input"), true);
         $this->db           = new DB();
+    }
+
+    // DB接続
+    protected function connectDb()
+    {
+        return $this->db->connect();
     }
 
     // 画像をbase64へエンコード

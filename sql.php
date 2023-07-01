@@ -170,15 +170,9 @@ class Sql
     // =====================================================================
     // 予約
     // =====================================================================
-    const SelectReservesById = "
+    const SelectMaxReservesId = "
         SELECT
-            f_reserve_id            AS id,
-            f_movie_manage_id       AS manage_id,
-            f_reserve_date          AS date,
-            f_member_id             AS member_id,
-            f_reserve_delegate_name AS name,
-            f_reserve_delegate_tel  AS tel,
-            f_reserve_delegate_mail AS mail
+            f_reserve_id            AS id
         FROM
             t_reserves
         WHERE
@@ -186,6 +180,25 @@ class Sql
         ORDER BY
             date DESC
         LIMIT 1
+    ";
+
+    const SelectReservesById = "
+        SELECT
+            reserve.f_reserve_id            AS id,
+            reserve.f_movie_manage_id       AS manage_id,
+            reserve.f_reserve_date          AS date,
+            reserve.f_member_id             AS member_id,
+            reserve.f_reserve_delegate_name AS name,
+            reserve.f_reserve_delegate_tel  AS tel,
+            reserve.f_reserve_delegate_mail AS mail
+        FROM
+            t_reserves          AS reserve
+        JOIN
+            t_movie_manages     AS manage
+        WHERE
+            f_member_id = :id
+        ORDER BY
+            date DESC
     ";
 
     const SelectReserveSeatsById = "
@@ -197,7 +210,6 @@ class Sql
         WHERE
             f_reserve_id = :id
     ";
-
 
     const InsertReserves = "
         INSERT INTO
@@ -235,5 +247,27 @@ class Sql
                 :name,
                 :ticket
             );
+    ";
+
+    // =====================================================================
+    // 会員
+    // =====================================================================
+    const SelectUserById = "";
+
+    const InsertUsers = "";
+
+    // =====================================================================
+    // ログイン
+    // =====================================================================
+    const CheckLogin = "
+        SELECT
+            f_member_id     AS id,
+            f_member_name   As name
+        FROM
+            t_members
+        WHERE
+            f_user_email = :email
+        AND
+            f_user_password = :password
     ";
 }
