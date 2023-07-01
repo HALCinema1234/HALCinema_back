@@ -807,6 +807,57 @@ INSERT INTO `t_movie_types` (`f_movie_type_id`, `f_movie_type_name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `t_reserves`
+--
+
+CREATE TABLE `t_reserves` (
+  `f_reserve_id` int(11) NOT NULL,
+  `f_movie_manage_id` int(11) NOT NULL,
+  `f_reserve_date` datetime NOT NULL,
+  `f_member_id` int(11) DEFAULT NULL,
+  `f_reserve_delegate_name` varchar(31) DEFAULT NULL,
+  `f_reserve_delegate_tel` varchar(11) DEFAULT NULL,
+  `f_reserve_delegate_mail` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `t_reserves`
+--
+
+INSERT INTO `t_reserves` (`f_reserve_id`, `f_movie_manage_id`, `f_reserve_date`, `f_member_id`, `f_reserve_delegate_name`, `f_reserve_delegate_tel`, `f_reserve_delegate_mail`) VALUES
+(1, 3, '2023-06-30 02:02:03', NULL, NULL, NULL, NULL),
+(2, 3, '2023-06-30 02:02:05', NULL, NULL, NULL, NULL),
+(3, 3, '2023-06-30 02:02:06', NULL, NULL, NULL, NULL),
+(4, 3, '2023-06-30 02:02:08', NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `t_reserve_seats`
+--
+
+CREATE TABLE `t_reserve_seats` (
+  `f_reserve_id` int(11) NOT NULL,
+  `f_reserve_seat_name` varchar(4) NOT NULL,
+  `f_ticket_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `t_reserve_seats`
+--
+
+INSERT INTO `t_reserve_seats` (`f_reserve_id`, `f_reserve_seat_name`, `f_ticket_id`) VALUES
+(1, 'A01', 1),
+(2, 'B01', 1),
+(2, 'B02', 1),
+(4, 'B05', 3),
+(4, 'B06', 3),
+(4, 'B07', 3),
+(3, 'D07', 2);
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `t_theaters`
 --
 
@@ -899,6 +950,12 @@ ALTER TABLE `t_movie_types`
   ADD PRIMARY KEY (`f_movie_type_id`);
 
 --
+-- テーブルのインデックス `t_reserves`
+--
+ALTER TABLE `t_reserves`
+  ADD PRIMARY KEY (`f_reserve_id`);
+
+--
 -- テーブルのインデックス `t_theaters`
 --
 ALTER TABLE `t_theaters`
@@ -930,13 +987,19 @@ ALTER TABLE `t_movie_images`
 -- テーブルの AUTO_INCREMENT `t_movie_manages`
 --
 ALTER TABLE `t_movie_manages`
-  MODIFY `f_movie_manage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `f_movie_manage_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- テーブルの AUTO_INCREMENT `t_movie_types`
 --
 ALTER TABLE `t_movie_types`
   MODIFY `f_movie_type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- テーブルの AUTO_INCREMENT `t_reserves`
+--
+ALTER TABLE `t_reserves`
+  MODIFY `f_reserve_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- テーブルの AUTO_INCREMENT `t_theaters`

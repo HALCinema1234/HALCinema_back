@@ -28,8 +28,8 @@
 | GET        | movies/{映画 ID}    | 映画情報・公開スケジュール(一週間)を取得 |
 | GET        | ticket              | 券種リストを取得                         |
 | GET        | seats/{上映管理 ID} | 予約済座席リストを取得                   |
-| GET        | users/{会員 ID}     | 作成中                                   |
-| PUT        | reserves/           | 作成中                                   |
+| GET        | users/{会員 ID}     | (作成中)                                 |
+| PUT        | reserves/           | 予約情報の登録                           |
 
 ## 構成
 
