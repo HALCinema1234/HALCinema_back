@@ -31,7 +31,6 @@ if (file_exists($file_path)) {
 
     $class_name     = ucfirst($file) . "Controller";                    // コントロール名
     $method_name    = strtolower($_SERVER["REQUEST_METHOD"]);           // メソッド名(HTTPメソッド)
-
     $object         = new $class_name();                                // オブジェクト生成
     $response       = json_encode($object->$method_name(...$paths));
     $response_code  = $object->code ?? 200;

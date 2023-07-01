@@ -46,7 +46,7 @@ class MoviesController extends Controller
         }
     }
 
-    // 映画
+    // 映画詳細の取得
     private function getById($id): array
     {
         // 映画情報検索
