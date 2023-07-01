@@ -480,6 +480,60 @@ INSERT INTO `t_handling_movies_types` (`f_movie_id`, `f_movie_type_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `t_jobs`
+--
+
+CREATE TABLE `t_jobs` (
+  `f_job_id` int(11) NOT NULL,
+  `f_job_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `t_jobs`
+--
+
+INSERT INTO `t_jobs` (`f_job_id`, `f_job_name`) VALUES
+(1, '営業'),
+(2, 'サービス業'),
+(3, '製造業'),
+(4, 'エンジニア'),
+(5, '研究職'),
+(6, '事務職'),
+(7, 'デザイナー'),
+(8, '医療'),
+(9, '福祉'),
+(10, '教育');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `t_members`
+--
+
+CREATE TABLE `t_members` (
+  `f_member_id` int(11) NOT NULL,
+  `f_member_name` varchar(255) NOT NULL,
+  `f_member_name_kana` varchar(255) NOT NULL,
+  `f_member_password` varchar(255) NOT NULL,
+  `f_member_birthday` date NOT NULL,
+  `f_member_gender` smallint(6) NOT NULL,
+  `f_member_phone_number` varchar(11) NOT NULL,
+  `f_member_mail_address` varchar(255) NOT NULL,
+  `f_job_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- テーブルのデータのダンプ `t_members`
+--
+
+INSERT INTO `t_members` (`f_member_id`, `f_member_name`, `f_member_name_kana`, `f_member_password`, `f_member_birthday`, `f_member_gender`, `f_member_phone_number`, `f_member_mail_address`, `f_job_id`) VALUES
+(1, '内田竜一', 'うちだりゅういち', 'qRmFlhY26oFa', '1998-08-30', 1, '05731064710', 'ateramoto@gmail.com', 1),
+(2, '武内綾乃', 'たけうちあやの', 'GoSUo5WYkpKB', '2000-04-21', 2, '08679794990', 'kohaku788@@gmail.com', 2),
+(3, 'test', 'てすと', 'password', '1973-05-23', 1, '00000000000', 'test@gmail.com', 3);
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `t_movies`
 --
 
