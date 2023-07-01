@@ -33,7 +33,7 @@ class Controller{
     }
 
     // ファイルをutf8へエンコード
-    private function encode_utf8($file):string{
+    protected function encode_utf8($file):string{
         $str_file = file_get_contents($file);   // ファイルの中身を取得
         return mb_convert_encoding($str_file, "UTF8", "ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN");
     }
@@ -58,5 +58,3 @@ class Controller{
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
 }
-
-?>
