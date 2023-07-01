@@ -935,7 +935,9 @@ INSERT INTO `t_movie_types` (`f_movie_type_id`, `f_movie_type_name`) VALUES
 (1, '2D'),
 (2, 'IMAX'),
 (3, '4DX'),
-(4, 'Dolby ATMOS');
+(4, 'Dolby ATMOS'),
+(5, '字幕'),
+(6, '吹替');
 
 -- --------------------------------------------------------
 
