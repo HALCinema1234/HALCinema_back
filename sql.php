@@ -178,7 +178,7 @@ class Sql
         WHERE
             f_member_id = :id
         ORDER BY
-            date DESC
+            f_reserve_date DESC
         LIMIT 1
     ";
 
@@ -217,7 +217,7 @@ class Sql
             (
                 f_movie_manage_id,
                 f_reserve_date,
-                f_member_id
+                f_member_id,
                 f_reserve_delegate_name,
                 f_reserve_delegate_tel,
                 f_reserve_delegate_mail
