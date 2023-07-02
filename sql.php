@@ -266,8 +266,8 @@ class Sql
         FROM
             t_members
         WHERE
-            f_user_email = :email
+            f_member_mail_address = :email
         AND
-            f_user_password = :password
+            f_member_password = :password
     ";
 }
