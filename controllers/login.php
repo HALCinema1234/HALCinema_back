@@ -28,7 +28,7 @@ class LoginController extends Controller
         }
 
         $email = $data["email"];
-        $password = sha1($data['password']);
+        $password = $data['password'];
 
         $sourses = parent::connectDb()->prepare(Sql::CheckLogin);
         $sourses->bindparam(":email", $email, PDO::PARAM_STR);
