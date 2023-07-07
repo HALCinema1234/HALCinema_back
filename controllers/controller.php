@@ -16,7 +16,7 @@ class Controller
         $this->path           = mb_substr($_SERVER["SCRIPT_NAME"], 0, -9);
         $this->controller     = basename(__FILE__, ".php");
 
-        $this->url          =  $this->scheme . $this->host . $this->path .  $this->controller . "/";
+        $this->url          =   $this->controller . "/";
         $this->request_body = json_decode($this->encode_utf8("php://input"), true);
         $this->db           = new DB();
     }
@@ -37,7 +37,7 @@ class Controller
     // 画像URLの取得
     protected function url_image($img_url): string
     {
-        return $this->scheme . $this->host . $this->path . Env::IMG_FOLDER . $img_url;
+        return Env::IMG_FOLDER . $img_url;
     }
 
     // ファイルをutf8へエンコード
