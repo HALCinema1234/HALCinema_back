@@ -24,15 +24,28 @@ class MoviesController extends Controller
         // 映画情報と上映種別情報の連結
         $cnt = 0;
         while (count($res_movies) > $cnt) {
+            
+            // 上映種別
             $res_movies[$cnt]["types"] = array();
-
             foreach ($res_types as $res_type) {
                 if ($res_movies[$cnt]["id"] == $res_type["id"]) {
                     array_push($res_movies[$cnt]["types"], $res_type["name"]);
                 }
             }
 
+            // サムネイル
             $res_movies[$cnt]["thumbnail"] = parent::url_image($res_movies[$cnt]["thumbnail"]);
+            
+            // スクリーンショット
+            $res_movie_images = parent::selectById(Sql::SelectImagesById,  $res_movies[$cnt]["id"]);
+            $res_movies[$cnt]["images"] = array();
+            foreach ($res_movie_images as $image) {
+                array_push($res_movies[$cnt]["images"], parent::url_image($image["image_url"]));
+            }
+
+            // 上映スケジュール
+            $res_manages = $this->selectSchedulesById($res_movies[$cnt]["id"]);
+            $res_movies[$cnt]["manages"] = $res_manages;
 
             $cnt++;
         }
@@ -56,6 +69,7 @@ class MoviesController extends Controller
 
         // 上映管理検索
         $res_manages        = $this->selectSchedulesById($id);
+
         $cnt = 0;
         while (count($res_manages) > $cnt) {
             // 上映種別TBL検索
@@ -78,7 +92,6 @@ class MoviesController extends Controller
         foreach ($res_movie_types as $type) {
             array_push($res_movies["type"], $type["name"]);
         }
-
 
         $res_movies["manages"] = $res_manages;
 

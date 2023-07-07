@@ -10,13 +10,16 @@ class Sql
         SELECT
             movie.f_movie_id            AS id,
             movie.f_movie_name          AS title,
-            movie.f_movie_start_day     AS start,
             image.f_movie_image_url     AS thumbnail,
+            movie.f_movie_start_day     AS start,
             CASE
                 WHEN f_movie_start_day < now() THEN true
                 ELSE    false
-            END                     AS on_air,
-            f_movie_age_restrictions    AS age_restrictions
+            END                         AS on_air,
+            f_movie_age_restrictions    AS age_restrictions,
+            movie.f_movie_data          AS data,
+            movie.f_movie_introduction  AS introduction,
+            movie.f_movie_time          AS time
         FROM
             t_movies        AS movie
         JOIN
