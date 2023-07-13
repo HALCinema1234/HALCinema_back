@@ -115,7 +115,7 @@ class Sql
     const SelectMovieTypesById   = Sql::SelectMovieTypes . "   WHERE handling.f_movie_id = :id";
 
     // 上映映画の上映種別
-    const SelectManageTypesById = "
+    const SelectManageTypes = "
         SELECT
             handling.f_movie_manage_id  AS id,
             type.f_movie_type_name      AS name
@@ -124,9 +124,9 @@ class Sql
         JOIN
             t_movie_types as type
         ON
-            handling.f_movie_type_id = type.f_movie_type_id
-        WHERE
-            handling.f_movie_manage_id = :id";
+            handling.f_movie_type_id = type.f_movie_type_id";
+
+    const SelectManageTypesById = Sql::SelectManageTypes . "    WHERE handling.f_movie_manage_id = :id";
 
     // =====================================================================
     // 映画画像
