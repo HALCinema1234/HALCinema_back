@@ -50,51 +50,51 @@ class Sql
     // =====================================================================
     // 本日から1週間分のスケジュールを取得
     const SelectSchedulesById = "
-    SELECT
-        manage.f_movie_manage_id                        AS id,
-        manage.f_movie_manage_day                       AS day,
-        manage.f_movie_manage_start_time                AS start,
-        DATE_ADD(
-            manage.f_movie_manage_start_time,
-            INTERVAL CEIL(movie.f_movie_time/10)*10 + :time1 MINUTE
-        )                                               AS end,
-        CEIL(movie.f_movie_time/10)*10 + :time2         AS screening_time,
-        manage.f_theater_id                             AS theater_id,
-        CASE theater.f_theater_type
-            WHEN 1 THEN 200
-            WHEN 2 THEN 120
-            ELSE 70
-        END                                             AS all_seats,
-        CASE isnull(reserve_info.cnt)
-            WHEN 1 THEN 0
-            ELSE reserve_info.cnt
-        END                                             AS reserved_seats
-    FROM
-        t_movie_manages     AS manage
-    JOIN
-        t_movies            AS movie
-    ON
-        manage.f_movie_id = movie.f_movie_id
-    JOIN
-        t_theaters          AS theater
-    ON
-        manage.f_theater_id = theater.f_theater_id
-    LEFT JOIN
-        (SELECT
-            reserve.f_movie_manage_id           AS manage_id,
-            count(seat.f_reserve_seat_name)     AS cnt
+        SELECT
+            manage.f_movie_manage_id                        AS id,
+            manage.f_movie_manage_day                       AS day,
+            manage.f_movie_manage_start_time                AS start,
+            DATE_ADD(
+                manage.f_movie_manage_start_time,
+                INTERVAL CEIL(movie.f_movie_time/10)*10 + :time1 MINUTE
+            )                                               AS end,
+            CEIL(movie.f_movie_time/10)*10 + :time2         AS screening_time,
+            manage.f_theater_id                             AS theater_id,
+            CASE theater.f_theater_type
+                WHEN 1 THEN 200
+                WHEN 2 THEN 120
+                ELSE 70
+            END                                             AS all_seats,
+            CASE isnull(reserve_info.cnt)
+                WHEN 1 THEN 0
+                ELSE reserve_info.cnt
+            END                                             AS reserved_seats
         FROM
-            t_reserve_seats AS seat
+            t_movie_manages     AS manage
         JOIN
-            t_reserves      AS reserve
+            t_movies            AS movie
         ON
-            seat.f_reserve_id = reserve.f_reserve_id)	AS reserve_info
-    ON
-        reserve_info.manage_id = manage.f_movie_manage_id
-    WHERE
-        manage.f_movie_manage_day BETWEEN NOW() AND DATE_ADD( NOW(), INTERVAL 7 DAY)
-    AND
-        manage.f_movie_id = :id";
+            manage.f_movie_id = movie.f_movie_id
+        JOIN
+            t_theaters          AS theater
+        ON
+            manage.f_theater_id = theater.f_theater_id
+        LEFT JOIN
+            (SELECT
+                reserve.f_movie_manage_id           AS manage_id,
+                count(seat.f_reserve_seat_name)     AS cnt
+            FROM
+                t_reserve_seats AS seat
+            JOIN
+                t_reserves      AS reserve
+            ON
+                seat.f_reserve_id = reserve.f_reserve_id)	AS reserve_info
+        ON
+            reserve_info.manage_id = manage.f_movie_manage_id
+        WHERE
+            manage.f_movie_manage_day BETWEEN NOW() AND DATE_ADD( NOW(), INTERVAL 7 DAY)
+        AND
+            manage.f_movie_id = :id";
 
     // =====================================================================
     // 上映種別
@@ -131,6 +131,15 @@ class Sql
     // =====================================================================
     // 映画画像
     // =====================================================================
+    const SelectImagesAll = "
+    SELECT
+        f_movie_id          AS id,
+        f_movie_image_url   AS image_url
+    FROM
+        t_movie_images
+    WHERE
+        f_movie_image_thumbnail = 0";
+
     const SelectImagesById = "
         SELECT
             f_movie_image_url   AS image_url
@@ -144,7 +153,7 @@ class Sql
     // =====================================================================
     // 券種
     // =====================================================================
-    const SelectTickets = "
+    const SeleictTickets = "
             SELECT
                 f_ticket_id     AS id,
                 f_ticket_name   AS name,
@@ -153,8 +162,21 @@ class Sql
                 t_tickets";
 
     // =====================================================================
-    // 券種
+    // 座席
     // =====================================================================
+    const SelectTheaterById = "
+        SELECT
+            theater.f_theater_type  AS type
+        FROM
+            t_movie_manages         AS manage
+        JOIN
+            t_theaters              AS theater
+        ON
+            manage.f_theater_id = theater.f_theater_id
+        WHERE
+            manage.f_movie_manage_id = :id
+    ";
+
     const SelectSeatsById = "
         SELECT
             LEFT(seat.f_reserve_seat_name,1)    AS row,
@@ -274,3 +296,5 @@ class Sql
             f_member_password = :password
     ";
 }
+
+?>

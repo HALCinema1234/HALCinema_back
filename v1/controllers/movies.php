@@ -18,33 +18,41 @@ class MoviesController extends Controller
     // 映画リストの取得
     private function getAll(): array
     {
-        $res_movies = parent::select(Sql::SelectMoviesAll);         // 映画TBL検索
-        $res_types  = parent::select(Sql::SelectMovieTypesAll);     // 上映種別TBL検索
-
+        $res_movies         = parent::select(Sql::SelectMoviesAll);         // 映画検索
+        $res_types          = parent::select(Sql::SelectMovieTypesAll);     // 上映種別検索
+        $res_movie_images   = parent::select(Sql::SelectImagesAll);         // 画像検索
+        
         // 映画情報と上映種別情報の連結
         $cnt = 0;
         while (count($res_movies) > $cnt) {
-            
+            $res_movies[$cnt]["types"]      = array();
+            $res_movies[$cnt]["images"]     = array();
+            $res_movies[$cnt]["manages"]    = array();
+
             // 上映種別
-            $res_movies[$cnt]["types"] = array();
-            foreach ($res_types as $res_type) {
-                if ($res_movies[$cnt]["id"] == $res_type["id"]) {
-                    array_push($res_movies[$cnt]["types"], $res_type["name"]);
-                }
+            foreach ($res_types as $type) { 
+                $res_movies[$cnt]["id"] == $type["id"] && array_push($res_movies[$cnt]["types"], $type["name"]); 
             }
 
             // サムネイル
             $res_movies[$cnt]["thumbnail"] = parent::url_image($res_movies[$cnt]["thumbnail"]);
             
             // スクリーンショット
-            $res_movie_images = parent::selectById(Sql::SelectImagesById,  $res_movies[$cnt]["id"]);
-            $res_movies[$cnt]["images"] = array();
             foreach ($res_movie_images as $image) {
-                array_push($res_movies[$cnt]["images"], parent::url_image($image["image_url"]));
+                $res_movies[$cnt]["id"] == $image["id"] && array_push($res_movies[$cnt]["images"], parent::url_image($image["image_url"]));
             }
 
             // 上映スケジュール
             $res_manages = $this->selectSchedulesById($res_movies[$cnt]["id"]);
+            // while (count($res_manages) > $cnt) {
+            //     // 上映種別TBL検索
+            //     $res_manage_types  = parent::selectById(Sql::SelectManageTypesById, $res_manages[$cnt]["id"]);
+
+            //     $res_manages[$cnt]["types"] = array();
+            //     foreach ($res_manage_types as $type) { array_push($res_manages[$cnt]["types"], $type["name"]); }
+
+            //     $cnt++;
+            // }
             $res_movies[$cnt]["manages"] = $res_manages;
 
             $cnt++;
