@@ -1,4 +1,11 @@
 <?php
+interface crad
+{
+    public function get(): array;
+    public function post(): array;
+    public function put(): array;
+    public function delete(): array;
+}
 
 class Controller
 {
@@ -19,6 +26,18 @@ class Controller
         $this->url          =   $this->controller . "/";
         $this->request_body = json_decode($this->encode_utf8("php://input"), true);
         $this->db           = new DB();
+    }
+
+    // エラーコード
+    protected function fatal_error(): array
+    {
+        return $this->error(500, "fatal_error");
+    }
+
+    protected function error($code, $message): array
+    {
+        $this->code = $code;
+        return ["error" => ["type" => $message]];
     }
 
     // DB接続

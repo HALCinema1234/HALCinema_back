@@ -1,26 +1,42 @@
 <?php
-class MoviesController extends Controller
+class MoviesController extends Controller implements crad
 {
 
     // =============================================================================
     // get
     // =============================================================================
-    public function get($id = null): array
+    public function get($movie_id = null): array
     {
-        if (parent::is_set($id)) {
-            return $this->getById($id);
-        } else {
-            return $this->getAll();
-        }
+        return
+            parent::is_set($movie_id)
+            ? $this->getById($movie_id)         // 映画IDで抽出
+            : $this->getAll();                  // すべて
     }
 
-    // 映画リストの取得
+    public function post(): array
+    {
+        return parent::fatal_error();
+    }
+
+    public function put(): array
+    {
+        return parent::fatal_error();
+    }
+
+    public function delete(): array
+    {
+        return parent::fatal_error();
+    }
+
+    // ================================================================
+    // 関数
+    // ================================================================
     private function getAll(): array
     {
         // 映画情報検索
         $movies = parent::select(Sql::GetMoviesAll);        // 映画
         $types  = parent::select(Sql::GetMovieTypesAll);    // 上映種別
-        $images = parent::select(Sql::SelectImagesAll);     // 画像
+        $images = parent::select(Sql::GetImagesAll);        // 画像
 
         // 上映管理検索
         $manages        = $this->selectSchedulesAll();              // 上映スケジュール
@@ -38,8 +54,8 @@ class MoviesController extends Controller
             $movies[$i]["thumbnail"] = parent::url_image($movies[$i]["thumbnail"]);
 
             // 上映種別
-            foreach ($types as $type) { 
-                $movie_id == $type["id"] && array_push($movies[$i]["types"], $type["name"]); 
+            foreach ($types as $type) {
+                $movie_id == $type["id"] && array_push($movies[$i]["types"], $type["name"]);
             }
 
             // スクリーンショット
@@ -48,11 +64,11 @@ class MoviesController extends Controller
             }
 
             $j = 0;
-            while(count($manages) > $j){
+            while (count($manages) > $j) {
                 $manages[$j]["types"]    = array();
-                
+
                 // 上映種別
-                foreach($manage_types as $type){
+                foreach ($manage_types as $type) {
                     $manages[$j]["id"] == $type["id"] && array_push($manages[$j]["types"], $type["name"]);
                 }
 
@@ -65,21 +81,15 @@ class MoviesController extends Controller
             $i++;
         }
 
-        if ($movies) {
-            return $movies;
-        } else {
-            $this->code = 500;
-            return ["error" => ["type" => "fatal_error"]];
-        }
+        return $movies ? $movies : parent::fatal_error();
     }
 
-    // 映画詳細の取得
     private function getById($id): array
     {
         // 映画情報検索
-        $movies   = parent::selectById(Sql::GetMoviesById, $id)[0];         // 映画
-        $types    = parent::selectById(Sql::GetMovieTypesById, $id);        // 上映種別
-        $images   = parent::selectById(Sql::SelectImagesById, $id);         // スクリーンショット
+        $movies   = parent::selectById(Sql::GetMoviesById,      $id)[0];    // 映画
+        $types    = parent::selectById(Sql::GetMovieTypesById,  $id);       // 上映種別
+        $images   = parent::selectById(Sql::GetImagesById,      $id);       // スクリーンショット
 
         // 上映管理検索
         $manages        = $this->selectSchedulesById($id);                  // スケジュール
@@ -112,12 +122,7 @@ class MoviesController extends Controller
         }
         $movies["manages"] = $manages;
 
-        if ($movies) {
-            return $movies;
-        } else {
-            $this->code = 500;
-            return ["error" => ["type" => "fatal_error"]];
-        }
+        return $movies ? $movies : parent::fatal_error();
     }
 
     // スケジュール検索
@@ -132,21 +137,23 @@ class MoviesController extends Controller
         $sourses->bindValue(":seats_medium",    Env::SEATS_MEDIUM,      PDO::PARAM_INT);
         $sourses->bindValue(":seats_small",     Env::SEATS_SMALL,       PDO::PARAM_INT);
         $sourses->execute();
+
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
 
     private function selectSchedulesById($id): array
     {
         $sourses = parent::connectDb()->prepare(Sql::GetSchedulesById);
-        $sourses->bindValue(":time1", Env::AD_TIME, PDO::PARAM_INT);
-        $sourses->bindValue(":time2", Env::AD_TIME, PDO::PARAM_INT);
+        $sourses->bindValue(":time1",           Env::AD_TIME,           PDO::PARAM_INT);
+        $sourses->bindValue(":time2",           Env::AD_TIME,           PDO::PARAM_INT);
         $sourses->bindValue(":theater_large",   Env::THEATER_LARGE,     PDO::PARAM_INT);
         $sourses->bindValue(":seats_large",     Env::SEATS_LARGE,       PDO::PARAM_INT);
         $sourses->bindValue(":theater_medium",  Env::THEATER_MEDIUM,    PDO::PARAM_INT);
         $sourses->bindValue(":seats_medium",    Env::SEATS_MEDIUM,      PDO::PARAM_INT);
         $sourses->bindValue(":seats_small",     Env::SEATS_SMALL,       PDO::PARAM_INT);
-        $sourses->bindValue(":id", $id, PDO::PARAM_INT);
+        $sourses->bindValue(":id",              $id,                    PDO::PARAM_INT);
         $sourses->execute();
+
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
 }

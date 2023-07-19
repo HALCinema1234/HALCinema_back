@@ -19,7 +19,7 @@ class SeatsController extends Controller
     private function getById($id): array
     {
         // 席の予約状況を取得
-        $res_seats  = parent::selectById(Sql::SelectSeatsById, $id);
+        $res_seats  = parent::selectById(Sql::GetSeatsById, $id);
 
         if ($res_seats) {
             return $res_seats;

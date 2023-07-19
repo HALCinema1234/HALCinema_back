@@ -101,11 +101,13 @@ class Sql
     // =====================================================================
     // 上映種別
     // =====================================================================
+    // ---------------------------------------------------------------------
     // 映画の上映種別
+    // ---------------------------------------------------------------------
     const GetMovieTypes = "
         SELECT
-            handling.f_movie_id         AS id,
-            type.f_movie_type_name      AS name
+            handling.f_movie_id         AS id,      -- 映画ID
+            type.f_movie_type_name      AS name     -- 上映種別名
         FROM
             t_handling_movies_types as handling
         JOIN
@@ -116,11 +118,13 @@ class Sql
     const GetMovieTypesAll    = Sql::GetMovieTypes . "      ORDER BY id";
     const GetMovieTypesById   = Sql::GetMovieTypes . "      WHERE handling.f_movie_id = :id";
 
+    // ---------------------------------------------------------------------
     // 上映映画の上映種別
+    // ---------------------------------------------------------------------
     const GetManageTypes = "
         SELECT
-            handling.f_movie_manage_id  AS id,
-            type.f_movie_type_name      AS name
+            handling.f_movie_manage_id  AS id,      -- 上映管理ID
+            type.f_movie_type_name      AS name     -- 上映種別名
         FROM
             t_handling_manages_types    AS handling
         JOIN
@@ -138,20 +142,20 @@ class Sql
             manage.f_movie_id = :id";
 
     // =====================================================================
-    // 映画画像
+    // 映画画像(スクリーンショット)
     // =====================================================================
-    const SelectImagesAll = "
-    SELECT
-        f_movie_id          AS id,
-        f_movie_image_url   AS image_url
-    FROM
-        t_movie_images
-    WHERE
-        f_movie_image_thumbnail = 0";
-
-    const SelectImagesById = "
+    const GetImagesAll = "
         SELECT
-            f_movie_image_url   AS image_url
+            f_movie_id          AS id,          -- 映画ID
+            f_movie_image_url   AS image_url    -- 画像URL
+        FROM
+            t_movie_images
+        WHERE
+            f_movie_image_thumbnail = 0";
+
+    const GetImagesById = "
+        SELECT
+            f_movie_image_url   AS image_url    -- 画像URL
         FROM
             t_movie_images
         WHERE
@@ -162,18 +166,18 @@ class Sql
     // =====================================================================
     // 券種
     // =====================================================================
-    const SeleictTickets = "
+    const GetTickets = "
             SELECT
-                f_ticket_id     AS id,
-                f_ticket_name   AS name,
-                f_ticket_price  As price
+                f_ticket_id     AS id,      -- 券種ID
+                f_ticket_name   AS name,    -- 券種名
+                f_ticket_price  As price    -- 値段
             FROM
                 t_tickets";
 
     // =====================================================================
     // 座席
     // =====================================================================
-    const SelectTheaterById = "
+    const GetTheaterById = "
         SELECT
             theater.f_theater_type  AS type
         FROM
@@ -186,7 +190,7 @@ class Sql
             manage.f_movie_manage_id = :id
     ";
 
-    const SelectSeatsById = "
+    const GetSeatsById = "
         SELECT
             LEFT(seat.f_reserve_seat_name,1)    AS row,
             RIGHT(seat.f_reserve_seat_name,1)   AS col
@@ -204,9 +208,9 @@ class Sql
     // =====================================================================
     // 予約
     // =====================================================================
-    const SelectMaxReservesId = "
+    const GetMaxReservesId = "
         SELECT
-            f_reserve_id            AS id
+            f_reserve_id            AS id   -- 予約ID
         FROM
             t_reserves
         WHERE
@@ -216,15 +220,15 @@ class Sql
         LIMIT 1
     ";
 
-    const SelectReservesById = "
+    const GetReservesById = "
         SELECT
-            reserve.f_reserve_id            AS id,
-            reserve.f_movie_manage_id       AS manage_id,
-            reserve.f_reserve_date          AS date,
-            reserve.f_member_id             AS member_id,
-            reserve.f_reserve_delegate_name AS name,
-            reserve.f_reserve_delegate_tel  AS tel,
-            reserve.f_reserve_delegate_mail AS mail
+            reserve.f_reserve_id            AS id,          -- 予約ID
+            reserve.f_movie_manage_id       AS manage_id,   -- 上映管理ID
+            reserve.f_reserve_date          AS date,        -- 予約日時
+            reserve.f_member_id             AS member_id,   -- 会員ID
+            reserve.f_reserve_delegate_name AS name,        -- 会員名
+            reserve.f_reserve_delegate_tel  AS tel,         -- 会員電話番号
+            reserve.f_reserve_delegate_mail AS mail         -- 会員メールアドレス
         FROM
             t_reserves          AS reserve
         JOIN
@@ -233,9 +237,9 @@ class Sql
             f_member_id = :id
         ORDER BY
             date DESC
-    ";
+        LIMIT 1";
 
-    const SelectReserveSeatsById = "
+    const GetReserveSeatsById = "
         SELECT
             f_reserve_seat_name     AS name,
             f_ticket_id             AS ticket
@@ -245,7 +249,7 @@ class Sql
             f_reserve_id = :id
     ";
 
-    const InsertReserves = "
+    const AddReserves = "
         INSERT INTO
             t_reserves
             (
@@ -267,7 +271,7 @@ class Sql
             );
     ";
 
-    const InsertReserveSeats = "
+    const AddReserveSeats = "
         INSERT INTO
             t_reserve_seats
             (
@@ -286,9 +290,25 @@ class Sql
     // =====================================================================
     // 会員
     // =====================================================================
-    const SelectUserById = "";
+    const GetUserById = "
+        SELECT
+            member.f_member_name            AS name,
+            member.f_member_name_kana       AS kana,
+            member.f_member_birthday        AS birthday,
+            member.f_member_gender          AS gender,
+            member.f_member_phone_number    AS phone_number,
+            member.f_member_mail_address    AS mail_address,
+            job.f_job_name                  AS job
+        FROM
+            t_members   AS member
+        JOIN
+            t_jobs      AS job
+        ON
+            member.f_job_id = job.f_job_id
+        WHERE
+            member.f_member_id = :id";
 
-    const InsertUsers = "";
+    const AddUsers = "";
 
     // =====================================================================
     // ログイン

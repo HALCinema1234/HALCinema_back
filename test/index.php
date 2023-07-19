@@ -17,7 +17,6 @@ include(__DIR__ . "/controllers/controller.php");       // コントローラー
 // =============================================================================
 $pattern = '|' . dirname($_SERVER["SCRIPT_NAME"]) . '/([\w%/]*)|';      // パターン(ファイル名/引数/引数/…)
 preg_match($pattern, $_SERVER["REQUEST_URI"], $matches);                // URIから(ファイル名/引数/引数/…)を抽出
-
 $paths  = explode('/', $matches[1]);                                    // 抽出済URIを"/"で分割して配列化
 $file   = array_shift($paths);                                          // $paths[0]を配列から切り取って変数に格納
 $file_path = './controllers/' . $file . '.php';                         // ファイルパス

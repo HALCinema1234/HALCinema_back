@@ -16,9 +16,9 @@ class ReservesController extends Controller
 
     public function getById($member_id): array
     {
-        $res_reserves = parent::selectById(Sql::SelectReservesById . "  LIMIT 1", $member_id)[0];
+        $res_reserves = parent::selectById(Sql::GetReservesById . "  LIMIT 1", $member_id)[0];
         $res_reserves["seat"] = array();
-        $res_reserves["seat"] = parent::selectById(Sql::SelectReserveSeatsById, $res_reserves["id"]);
+        $res_reserves["seat"] = parent::selectById(Sql::GetReserveSeatsById, $res_reserves["id"]);
 
         if ($res_reserves) {
             return $res_reserves;
@@ -67,17 +67,17 @@ class ReservesController extends Controller
         // DB登録
         // -------------------------------------------------------------------------
         // t_reserve(予約TBL)登録
-        $statement = $this->connectDb()->prepare(Sql::InsertReserves);
+        $statement = $this->connectDb()->prepare(Sql::AddReserves);
         $statement->bindparam(":manage_id", $data["manage_id"], PDO::PARAM_INT);
         $statement->bindValue(":member_id", $data["member_id"], PDO::PARAM_INT);
         $statement->execute();
 
         if ($statement->rowCount() == 1) {
-            $reserve_id =  parent::selectById(Sql::SelectMaxReservesId, $data["member_id"])[0]["id"];
+            $reserve_id =  parent::selectById(Sql::GetMaxReservesId, $data["member_id"])[0]["id"];
 
             foreach ($data["seat"] as $seat) {
                 // t_seats(座席予約TBL)登録
-                $statement = $this->connectDb()->prepare(Sql::InsertReserveSeats);
+                $statement = $this->connectDb()->prepare(Sql::AddReserveSeats);
                 $statement->bindparam(":id", $reserve_id, PDO::PARAM_INT);
                 $statement->bindValue(":name", $seat["name"], PDO::PARAM_STR);
                 $statement->bindValue(":ticket", $seat["ticket"], PDO::PARAM_INT);

@@ -1,31 +1,37 @@
 <?php
-class SeatsController extends Controller
+class SeatsController extends Controller implements crad
 {
 
-    // =============================================================================
-    // get
-    // =============================================================================
-    public function get($id = null): array
+    public function get($manage_id = null): array
     {
-        if ($this->is_set($id)) {
-            return $this->getById($id);
-        } else {
-            $this->code = 500;
-            return ["error" => ["type" => "fatal_error"]];
-        }
+        return
+            $this->is_set($manage_id)
+            ? $this->getById($manage_id)        // 上映管理IDで抽出
+            : parent::fatal_error();            // エラー
     }
 
-    // idで抽出
-    private function getById($id): array
+    public function post(): array
     {
-        // 席の予約状況を取得
-        $res_seats  = parent::selectById(Sql::SelectSeatsById, $id);
+        return parent::fatal_error();
+    }
 
-        if ($res_seats) {
-            return $res_seats;
-        } else {
-            $this->code = 500;
-            return ["error" => ["type" => "fatal_error"]];
-        }
+    public function put(): array
+    {
+        return parent::fatal_error();
+    }
+
+    public function delete(): array
+    {
+        return parent::fatal_error();
+    }
+
+    // ================================================================
+    // 関数
+    // ================================================================
+    private function getById($manage_id): array
+    {
+        // 上映管理IDで抽出
+        $seats  = parent::selectById(Sql::GetSeatsById, $manage_id);
+        return $seats ? $seats : parent::fatal_error();
     }
 }
