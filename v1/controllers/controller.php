@@ -18,14 +18,14 @@ class Controller
     // コンストラクター
     function __construct()
     {
-        $this->scheme         = empty($_SERVER["HTTPS"]) ? "http://" : "https://";
-        $this->host           = $_SERVER["HTTP_HOST"];
-        $this->path           = mb_substr($_SERVER["SCRIPT_NAME"], 0, -9);
-        $this->controller     = basename(__FILE__, ".php");
+        $this->scheme           = empty($_SERVER["HTTPS"]) ? "http://" : "https://";
+        $this->host             = $_SERVER["HTTP_HOST"];
+        $this->path             = mb_substr($_SERVER["SCRIPT_NAME"], 0, -9);
+        $this->controller       = basename(__FILE__, ".php");
 
-        $this->url          =   $this->controller . "/";
-        $this->request_body = json_decode($this->encode_utf8("php://input"), true);
-        $this->db           = new DB();
+        $this->url              =   $this->controller . "/";
+        $this->request_body     = json_decode($this->encode_utf8("php://input"), true);
+        $this->db               = new DB();
     }
 
     // エラーコード

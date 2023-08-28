@@ -30,8 +30,7 @@ class SeatsController extends Controller implements crad
     // ================================================================
     private function getById($manage_id): array
     {
-        // 上映管理IDで抽出
-        $seats  = parent::selectById(Sql::GetSeatsById, $manage_id);
-        return $seats ? $seats : parent::fatal_error();
+        $seats = parent::selectById(Sql::GetSeatsById, $manage_id);
+        return $seats ? $seats : parent::fatal_error();;
     }
 }

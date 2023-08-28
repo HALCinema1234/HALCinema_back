@@ -27,8 +27,8 @@ class LoginController extends Controller
             return ["error" => ["type" => "invalid_param"]];
         }
 
-        $email = $data["email"];
-        $password = $data['password'];
+        $email      = $data["email"];
+        $password   = $data["password"];
 
         $sourses = parent::connectDb()->prepare(Sql::CheckLogin);
         $sourses->bindparam(":email", $email, PDO::PARAM_STR);

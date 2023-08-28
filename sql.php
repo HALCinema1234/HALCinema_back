@@ -5,13 +5,13 @@ class Sql
     // =====================================================================
     // 映画情報
     // =====================================================================
-    // 公開が終了していない映画すべてを検索する
-    const GetMoviesAll = "
+    const GetMovies = "
         SELECT
             movie.f_movie_id            AS id,                  -- 映画ID
             movie.f_movie_name          AS title,               -- タイトル
             image.f_movie_image_url     AS thumbnail,           -- サムネイル
             movie.f_movie_start_day     AS start,               -- 公開開始日
+            movie.f_movie_end_day       AS end,                 -- 公開終了日
             CASE
                 WHEN f_movie_start_day < now() THEN true
                 ELSE    false
@@ -27,12 +27,11 @@ class Sql
         ON
             movie.f_movie_id = image.f_movie_id
         WHERE
-            image.f_movie_image_thumbnail = 1
-        AND
-            f_movie_end_day > NOW()
-        ORDER BY start";
+            image.f_movie_image_thumbnail = 1";
 
-    // 映画IDを指定して検索する
+    // const GetMoviesAll = Sql::GetMovies . "    AND f_movie_end_day > NOW() ORDER BY start";
+    const GetMoviesAll = Sql::GetMovies . "    ORDER BY start";
+
     const GetMoviesById = "
         SELECT
             movie.f_movie_name              AS title,               -- タイトル
@@ -91,9 +90,21 @@ class Sql
             ON
                 seat.f_reserve_id = reserve.f_reserve_id)	AS reserve_info
         ON
-            reserve_info.manage_id = manage.f_movie_manage_id
-        WHERE
-            manage.f_movie_manage_day BETWEEN NOW() AND DATE_ADD( NOW(), INTERVAL 7 DAY)";
+            reserve_info.manage_id = manage.f_movie_manage_id";
+
+    // const GetSchedulesAll   = Sql::GetSchedules . "
+    //     WHERE
+    //         manage.f_movie_manage_day BETWEEN NOW() AND DATE_ADD( NOW(), INTERVAL 7 DAY)
+    //     ORDER BY
+    //         id, day, start ASC";
+
+    // const GetSchedulesById  = Sql::GetSchedules . "
+    //     WHERE
+    //         manage.f_movie_manage_day BETWEEN NOW() AND DATE_ADD( NOW(), INTERVAL 7 DAY)
+    //     AND
+    //         manage.f_movie_id = :id
+    //     ORDER BY
+    //         id, day, start ASC";
 
     const GetSchedulesAll   = Sql::GetSchedules . "     ORDER BY id, day, start ASC";
     const GetSchedulesById  = Sql::GetSchedules . "     AND manage.f_movie_id = :id     ORDER BY id, day, start ASC";
@@ -190,6 +201,18 @@ class Sql
             manage.f_movie_manage_id = :id
     ";
 
+    const GetCountSeatsById = "
+        SELECT
+            count(*)            AS count
+        FROM
+            t_reserve_seats     AS seat
+        JOIN
+            t_reserves          AS reserve
+        ON
+            seat.f_reserve_id = reserve.f_reserve_id
+        WHERE
+            reserve.f_movie_manage_id = :id";
+
     const GetSeatsById = "
         SELECT
             LEFT(seat.f_reserve_seat_name,1)    AS row,
@@ -219,6 +242,16 @@ class Sql
             f_reserve_date DESC
         LIMIT 1
     ";
+
+    const GetSeatsAll = "
+        SELECT
+            *
+        FROM
+            t_reserve_seats     AS seat
+        JOIN
+            t_reserves          AS reserve
+        ON
+            seat.f_reserve_id = reserve.f_reserve_id";
 
     const GetReservesById = "
         SELECT
@@ -290,15 +323,22 @@ class Sql
     // =====================================================================
     // 会員
     // =====================================================================
+    const GetMaxUserId = "
+        SELECT
+            MAX(f_member_id)    AS member_id
+        FROM
+            t_members;
+    ";
+
     const GetUserById = "
         SELECT
-            member.f_member_name            AS name,
-            member.f_member_name_kana       AS kana,
-            member.f_member_birthday        AS birthday,
-            member.f_member_gender          AS gender,
-            member.f_member_phone_number    AS phone_number,
-            member.f_member_mail_address    AS mail_address,
-            job.f_job_name                  AS job
+            member.f_member_name            AS name,            -- 名前
+            member.f_member_name_kana       AS kana,            -- 名前(かな)
+            member.f_member_birthday        AS birthday,        -- 誕生日
+            member.f_member_gender          AS gender,          -- 性別
+            member.f_member_phone_number    AS phone_number,    -- 電話番号
+            member.f_member_mail_address    AS mail_address,    -- メールアドレス
+            job.f_job_name                  AS job              -- 職業
         FROM
             t_members   AS member
         JOIN
@@ -308,7 +348,46 @@ class Sql
         WHERE
             member.f_member_id = :id";
 
-    const AddUsers = "";
+    const AddUsers = "
+        INSERT INTO
+            t_member
+            (
+                f_member_name,
+                f_member_name_kana,
+                f_member_password,
+                f_member_birthday,
+                f_member_gender,
+                f_member_phone_number,
+                f_member_mail_address,
+                f_job_id
+            )
+        VALUES
+            (
+                :name,
+                :name_kana,
+                :password,
+                :birthday,
+                :gender,
+                :phone_number,
+                :mail_address,
+                :job_id
+            );
+    ";
+
+    const UpdateUsers = "
+        UPDATE
+            t_member
+        SET
+            f_member_name           = :name,
+            f_member_name_kana      = :name_kana,
+            f_member_password       = :password,
+            f_member_birthday       = :birthday,
+            f_member_gender         = :gender,
+            f_member_phone_number   = :phone_number,
+            f_member_mail_address   = :mail_address,
+            f_job_id                = :job_id
+        WHERE
+            f_member_id = :member_id";
 
     // =====================================================================
     // ログイン
@@ -325,5 +404,3 @@ class Sql
             f_member_password = :password
     ";
 }
-
-?>
