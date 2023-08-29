@@ -350,7 +350,7 @@ class Sql
 
     const AddUsers = "
         INSERT INTO
-            t_member
+            t_members
             (
                 f_member_name,
                 f_member_name_kana,
@@ -376,7 +376,7 @@ class Sql
 
     const UpdateUsers = "
         UPDATE
-            t_member
+            t_members
         SET
             f_member_name           = :name,
             f_member_name_kana      = :name_kana,

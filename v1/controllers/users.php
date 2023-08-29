@@ -49,10 +49,12 @@ class UsersController extends Controller implements crad
 
         if ($this->is_set($isNew)) {
             // 新規作成
-            $isNew === "make" && $this->insert($data);
+            return $isNew === "make"
+                ? $this->insert($data)
+                : parent::error(400, "invalid_param");;
         } else {
             // 更新
-            array_key_exists("member_id", $data)
+            return array_key_exists("member_id", $data)
                 ? $this->update($data)
                 : parent::error(400, "invalid_param");
         }
