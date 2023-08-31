@@ -2,6 +2,38 @@
 
 class Users
 {
+    const GetAll = "
+    SELECT
+        member.f_member_id              AS id,              -- メンバーID
+        member.f_member_name            AS name,            -- 名前
+        member.f_member_name_kana       AS kana,            -- 名前(かな)
+        member.f_member_birthday        AS birthday,        -- 誕生日
+        CASE member.f_member_gender
+            WHEN 1 THEN '男性'
+            WHEN 2 THEN '女性'
+            ELSE 'そのほか'
+        END                             AS gender,          -- 性別
+        member.f_member_phone_number    AS phone_number,    -- 電話番号
+        member.f_member_mail_address    AS mail_address,    -- メールアドレス
+        job.f_job_name                  AS job,             -- 職業
+        reserve.count                   AS count_used
+    FROM
+        t_members   AS member
+    JOIN
+        t_jobs      AS job
+    ON
+        member.f_job_id = job.f_job_id
+    JOIN
+        (   SELECT
+                f_member_id             AS id,
+                count(*)                AS count
+            FROM
+                t_reserves
+            GROUP BY
+                 f_member_id )          AS reserve
+    ON
+        member.f_member_id = reserve.id";
+
     const GetById = "
         SELECT
             member.f_member_name            AS name,            -- 名前
@@ -19,6 +51,13 @@ class Users
             member.f_job_id = job.f_job_id
         WHERE
             member.f_member_id = :id";
+
+    const GetMaxMemberId = "
+        SELECT
+            MAX(f_member_id)    AS member_id
+        FROM
+        t_members
+    ";
 
     const Add = "
         INSERT INTO

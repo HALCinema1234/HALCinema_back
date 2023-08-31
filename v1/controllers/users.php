@@ -93,7 +93,7 @@ class UsersController extends Controller implements crad
         $statement->bindValue(":job_id",    $data["job_id"],    PDO::PARAM_INT);
         $statement->execute();
 
-        $member_id = parent::select(Sql::GetMaxUserId)[0]["member_id"];
+        $member_id = parent::select(Users::GetMaxMemberId)[0]["member_id"];
         $this->code = 201;
         return $this->postById($member_id);
     }
