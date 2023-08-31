@@ -53,7 +53,7 @@ class ReservesController extends Controller implements crad
     public function getById($member_id): array
     {
         // 会員IDで抽出
-        $reserves           = parent::selectById(Reserves::GetById, $member_id)[0];
+        $reserves           = parent::selectById(Reserves::GetById . "  LIMIT 1", $member_id)[0];
         $reserves["seat"]   = parent::selectById(Seats::GetByReserveId, $reserves["id"]);
 
         return $reserves ? $reserves : parent::fatal_error();
