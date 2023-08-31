@@ -4,6 +4,8 @@ class SeatsController extends Controller implements crad
 
     public function get($manage_id = null): array
     {
+        include_once(__DIR__ . "/../sql/Seats.php");
+
         return
             $this->is_set($manage_id)
             ? $this->getById($manage_id)        // 上映管理IDで抽出
@@ -30,7 +32,7 @@ class SeatsController extends Controller implements crad
     // ================================================================
     private function getById($manage_id): array
     {
-        $seats = parent::selectById(Sql::GetSeatsById, $manage_id);
+        $seats = parent::selectById(Seats::GetByManageId, $manage_id);
         return $seats ? $seats : parent::fatal_error();;
     }
 }

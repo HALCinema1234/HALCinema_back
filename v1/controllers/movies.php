@@ -1,12 +1,14 @@
 <?php
 class MoviesController extends Controller implements crad
 {
-
-    // =============================================================================
-    // get
-    // =============================================================================
     public function get($movie_id = null): array
     {
+        include_once(__DIR__ . "/../sql/Movies.php");
+        include_once(__DIR__ . "/../sql/MovieTypes.php");
+        include_once(__DIR__ . "/../sql/Schedules.php");
+        include_once(__DIR__ . "/../sql/ManageTypes.php");
+        include_once(__DIR__ . "/../sql/Images.php");
+
         return
             parent::is_set($movie_id)
             ? $this->getById($movie_id)         // 映画IDで抽出
@@ -34,13 +36,13 @@ class MoviesController extends Controller implements crad
     private function getAll(): array
     {
         // 映画情報検索
-        $movies         = parent::select(Sql::GetMoviesAll);        // 映画
-        $types          = parent::select(Sql::GetMovieTypesAll);    // 上映種別
-        $images         = parent::select(Sql::GetImagesAll);        // 画像
+        $movies         = parent::select(Movies::GetAll);           // 映画
+        $types          = parent::select(MovieTypes::GetAll);       // 上映種別
+        $images         = parent::select(Images::GetAll);           // 画像
 
         // 上映管理検索
         $manages        = $this->selectSchedulesAll();              // 上映スケジュール
-        $manage_types   = parent::select(Sql::GetManageTypesAll);   // 上映種別
+        $manage_types   = parent::select(ManageTypes::GetAll);      // 上映種別
 
         $i = 0;
         while (count($movies) > $i) {
@@ -87,13 +89,13 @@ class MoviesController extends Controller implements crad
     private function getById($id): array
     {
         // 映画情報検索
-        $movies         = parent::selectById(Sql::GetMoviesById,      $id)[0];  // 映画
-        $types          = parent::selectById(Sql::GetMovieTypesById,  $id);     // 上映種別
-        $images         = parent::selectById(Sql::GetImagesById,      $id);     // スクリーンショット
+        $movies         = parent::selectById(Movies::GetById,      $id)[0];     // 映画
+        $types          = parent::selectById(MovieTypes::GetById,  $id);        // 上映種別
+        $images         = parent::selectById(Images::GetById,      $id);        // スクリーンショット
 
         // 上映管理検索
         $manages        = $this->selectSchedulesById($id);                      // スケジュール
-        $manage_types   = parent::selectById(Sql::GetManageTypesById, $id);     // 上映種別
+        $manage_types   = parent::selectById(ManageTypes::GetById, $id);        // 上映種別
 
         $movies["images"]   = array();
         $movies["type"]     = array();
@@ -128,7 +130,7 @@ class MoviesController extends Controller implements crad
     // スケジュール検索
     private function selectSchedulesAll(): array
     {
-        $sourses = parent::connectDb()->prepare(Sql::GetSchedulesAll);
+        $sourses = parent::connectDb()->prepare(Schedules::GetAll);
         $sourses->bindValue(":time1",           Env::AD_TIME,           PDO::PARAM_INT);
         $sourses->bindValue(":time2",           Env::AD_TIME,           PDO::PARAM_INT);
         $sourses->bindValue(":theater_large",   Env::THEATER_LARGE,     PDO::PARAM_INT);
@@ -143,7 +145,7 @@ class MoviesController extends Controller implements crad
 
     private function selectSchedulesById($id): array
     {
-        $sourses = parent::connectDb()->prepare(Sql::GetSchedulesById);
+        $sourses = parent::connectDb()->prepare(Schedules::GetById);
         $sourses->bindValue(":time1",           Env::AD_TIME,           PDO::PARAM_INT);
         $sourses->bindValue(":time2",           Env::AD_TIME,           PDO::PARAM_INT);
         $sourses->bindValue(":theater_large",   Env::THEATER_LARGE,     PDO::PARAM_INT);

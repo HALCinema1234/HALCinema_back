@@ -7,6 +7,8 @@ class LoginController extends Controller
     // =============================================================================
     public function post(): array
     {
+        include_once(__DIR__ . "/../sql/Login.php");
+
         return $this->login();
     }
 
@@ -30,7 +32,7 @@ class LoginController extends Controller
         $email      = $data["email"];
         $password   = $data["password"];
 
-        $sourses = parent::connectDb()->prepare(Sql::CheckLogin);
+        $sourses = parent::connectDb()->prepare(Login::Check);
         $sourses->bindparam(":email", $email, PDO::PARAM_STR);
         $sourses->bindparam(":password", $password, PDO::PARAM_STR);
         $sourses->execute();

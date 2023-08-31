@@ -8,6 +8,8 @@ class UsersController extends Controller implements crad
 
     public function post(): array
     {
+        include_once(__DIR__ . "/../sql/Users.php");
+
         $data = json_decode(parent::encode_utf8("php://input"), true);
 
         // データが存在するか
@@ -26,6 +28,8 @@ class UsersController extends Controller implements crad
 
     public function put($isNew = null): array
     {
+        include_once(__DIR__ . "/../sql/Users.php");
+
         $data = json_decode(parent::encode_utf8("php://input"), true);
 
         // データが存在するか
@@ -71,14 +75,14 @@ class UsersController extends Controller implements crad
     private function postById($member_id): array
     {
         // 会員IDで抽出
-        $sourses = parent::selectById(Sql::GetUserById, $member_id);
+        $sourses = parent::selectById(Users::GetById, $member_id);
         return $sourses ? $sourses : parent::fatal_error();
     }
 
     private function insert($data): array
     {
         // 新規作成
-        $statement = $this->connectDb()->prepare(Sql::AddUsers);
+        $statement = $this->connectDb()->prepare(Users::Add);
         $statement->bindValue(":name",      $data["name"],      PDO::PARAM_STR);
         $statement->bindValue(":name_kana", $data["name_kana"], PDO::PARAM_STR);
         $statement->bindValue(":password",  $data["password"],  PDO::PARAM_STR);
@@ -97,7 +101,7 @@ class UsersController extends Controller implements crad
     private function update($data): array
     {
         // 更新
-        $statement = $this->connectDb()->prepare(Sql::UpdateUsers);
+        $statement = $this->connectDb()->prepare(Users::Edit);
         $statement->bindValue(":name",      $data["name"],      PDO::PARAM_STR);
         $statement->bindValue(":name_kana", $data["name_kana"], PDO::PARAM_STR);
         $statement->bindValue(":password",  $data["password"],  PDO::PARAM_STR);
