@@ -29,11 +29,11 @@
 | GET        | /v1/tickets             | 券種リストを取得                                   |                              |
 | GET        | /v1/seats/{上映管理 ID} | 予約済座席リストを取得                             |                              |
 | GET        | /v1/reserves/{会員 ID}  | 予約情報(最新 1 件)を取得                          |                              |
+| GET        | /v1/admins/seats        | 全公開の座席の予約状態の取得                       |                              |
+| GET        | /v1/admins/reserves     | 全予約履歴の取得                                   |                              |
+| GET        | /v1/admins/users        | 全ユーザーの取得                                   |                              |
 | POST       | /v1/login               | ログイン(成功時:ID と名前を取得/失敗時:401 エラー) | バリデーション/JWT 未対応    |
 | POST       | /v1/users               | ユーザー情報を取得                                 |                              |
-| POST       | /v1/admins/seats        | 全公開の座席の予約状態の取得                       |                              |
-| POST       | /v1/admins/reserves     | 全予約履歴の取得                                   |                              |
-| POST       | /v1/admins/users        | 全ユーザーの取得                                   |                              |
 | PUT        | /v1/users               | ユーザー情報の更新                                 | バリデーション 未対応        |
 | PUT        | /v1/user/make           | ユーザー情報の新規登録                             | バリデーション 未対応        |
 | PUT        | /v1/reserves            | 予約情報の登録                                     | バリデーション/非会員 未対応 |

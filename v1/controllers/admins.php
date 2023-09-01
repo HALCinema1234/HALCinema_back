@@ -1,11 +1,6 @@
 <?php class AdminsController extends Controller implements crad
 {
-    public function get(): array
-    {
-        return parent::fatal_error();
-    }
-
-    public function post($infomation = null): array
+    public function get($infomation = null): array
     {
         if (parent::is_set($infomation)) {
             switch ($infomation) {
@@ -23,6 +18,11 @@
             }
         }
 
+        return parent::fatal_error();
+    }
+
+    public function post(): array
+    {
         return parent::fatal_error();
     }
 

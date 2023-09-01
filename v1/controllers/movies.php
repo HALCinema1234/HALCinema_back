@@ -3,12 +3,18 @@ class MoviesController extends Controller implements crad
 {
     public function get($movie_id = null): array
     {
+        // ------------------------------------------------------------
+        // SQLの読込
+        // ------------------------------------------------------------
         include_once(__DIR__ . "/../sql/Movies.php");
         include_once(__DIR__ . "/../sql/MovieTypes.php");
         include_once(__DIR__ . "/../sql/Schedules.php");
         include_once(__DIR__ . "/../sql/ManageTypes.php");
         include_once(__DIR__ . "/../sql/Images.php");
 
+        // ------------------------------------------------------------
+        // DB検索処理
+        // ------------------------------------------------------------
         return
             parent::is_set($movie_id)
             ? $this->getById($movie_id)         // 映画IDで抽出
@@ -30,17 +36,15 @@ class MoviesController extends Controller implements crad
         return parent::fatal_error();
     }
 
-    // ================================================================
-    // 関数
-    // ================================================================
+    // すべて取得する
     private function getAll(): array
     {
-        // 映画情報検索
+        // 映画情報を検索する
         $movies         = parent::select(Movies::GetAll);           // 映画
         $types          = parent::select(MovieTypes::GetAll);       // 上映種別
         $images         = parent::select(Images::GetAll);           // 画像
 
-        // 上映管理検索
+        // 上映管理(スケジュール)を検索する
         $manages        = $this->selectSchedulesAll();              // 上映スケジュール
         $manage_types   = parent::select(ManageTypes::GetAll);      // 上映種別
 
@@ -86,14 +90,15 @@ class MoviesController extends Controller implements crad
         return $movies ? $movies : parent::fatal_error();
     }
 
+    // 映画IDで抽出する
     private function getById($id): array
     {
-        // 映画情報検索
+        // 映画情報を検索する
         $movies         = parent::selectById(Movies::GetById,      $id)[0];     // 映画
         $types          = parent::selectById(MovieTypes::GetById,  $id);        // 上映種別
         $images         = parent::selectById(Images::GetById,      $id);        // スクリーンショット
 
-        // 上映管理検索
+        // 上映管理を検索する
         $manages        = $this->selectSchedulesById($id);                      // スケジュール
         $manage_types   = parent::selectById(ManageTypes::GetById, $id);        // 上映種別
 

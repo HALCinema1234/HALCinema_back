@@ -3,34 +3,34 @@
 class Seats
 {
     const GetAll = "
-    SELECT
-        manage.f_movie_manage_day           AS day,
-        manage.f_movie_manage_start_time    AS start,
-        manage.f_theater_id                 AS theater,
-        movie.f_movie_name                  AS movie,
-        seat.f_reserve_seat_name            AS seat,
-        seat.f_reserve_id                   AS reserve_id,
-        member.f_member_name                AS name
-    FROM
-        t_reserve_seats         AS seat
-    JOIN
-        t_reserves              AS reserve
-    ON
-        seat.f_reserve_id = reserve.f_reserve_id
-    JOIN
-        t_movie_manages         AS manage
-    ON
-        reserve.f_movie_manage_id = manage.f_movie_manage_id
-    JOIN
-        t_movies                AS movie
-    ON
-        manage.f_movie_id = movie.f_movie_id
-    LEFT JOIN
-        t_members               AS member
-    ON
-        reserve.f_member_id = member.f_member_id
-    ORDER BY
-        day, start, theater";
+        SELECT
+            manage.f_movie_manage_day           AS day,
+            manage.f_movie_manage_start_time    AS start,
+            manage.f_theater_id                 AS theater,
+            movie.f_movie_name                  AS movie,
+            seat.f_reserve_seat_name            AS seat,
+            seat.f_reserve_id                   AS reserve_id,
+            member.f_member_name                AS name
+        FROM
+            t_reserve_seats         AS seat
+        JOIN
+            t_reserves              AS reserve
+        ON
+            seat.f_reserve_id = reserve.f_reserve_id
+        JOIN
+            t_movie_manages         AS manage
+        ON
+            reserve.f_movie_manage_id = manage.f_movie_manage_id
+        JOIN
+            t_movies                AS movie
+        ON
+            manage.f_movie_id = movie.f_movie_id
+        LEFT JOIN
+            t_members               AS member
+        ON
+            reserve.f_member_id = member.f_member_id
+        ORDER BY
+            day, start, theater";
 
     const GetByManageId = "
         SELECT
@@ -83,4 +83,7 @@ class Seats
                 :ticket
             );
     ";
+
+    const Edit = "";
+    const Del = "";
 }

@@ -67,4 +67,12 @@ class Reserves
                 NULL
             );
     ";
+
+    const Del = "
+        DELETE
+        FROM
+            t_reserves
+        WHERE
+            f_reserve_id = :id
+    ";
 }
