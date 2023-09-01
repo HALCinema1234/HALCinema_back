@@ -18,11 +18,7 @@ class Schedules
                 WHEN :theater_large     THEN :seats_large
                 WHEN :theater_medium    THEN :seats_medium
                 ELSE :seats_small
-            END                                             AS all_seats,       -- 全座席数
-            CASE isnull(reserve_info.cnt)
-                WHEN 1 THEN 0
-                ELSE reserve_info.cnt
-            END                                             AS reserved_seats   -- 予約座席数
+            END                                             AS all_seats        -- 全座席数
         FROM
             t_movie_manages     AS manage
         JOIN
@@ -32,19 +28,7 @@ class Schedules
         JOIN
             t_theaters          AS theater
         ON
-            manage.f_theater_id = theater.f_theater_id
-        LEFT JOIN
-            (SELECT
-                reserve.f_movie_manage_id           AS manage_id,
-                count(seat.f_reserve_seat_name)     AS cnt
-            FROM
-                t_reserve_seats AS seat
-            JOIN
-                t_reserves      AS reserve
-            ON
-                seat.f_reserve_id = reserve.f_reserve_id)	AS reserve_info
-        ON
-            reserve_info.manage_id = manage.f_movie_manage_id";
+            manage.f_theater_id = theater.f_theater_id";
 
     // const extract   = "     WHERE   manage.f_movie_manage_day BETWEEN NOW() AND DATE_ADD( NOW(), INTERVAL 7 DAY)";
     const Sort      = "     ORDER BY    id, day, start ASC";

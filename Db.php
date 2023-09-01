@@ -9,7 +9,7 @@ class Db{
             $dsn = "mysql:host=". Env::DB_HOST . ";dbname=" . Env::DB_NAME . ";charset=utf8;port=" . Env::DB_PORT;
             $driver_option = [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_EMULATE_PREPARES => true,
             ];
 
             $db = new PDO($dsn, Env::DB_ID, Env::DB_PASS, $driver_option);
@@ -23,5 +23,3 @@ class Db{
         return $db;
     }
 }
-
-?>

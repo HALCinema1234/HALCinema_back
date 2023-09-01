@@ -15,10 +15,14 @@ class MoviesController extends Controller implements crad
         // ------------------------------------------------------------
         // DB検索処理
         // ------------------------------------------------------------
-        return
-            parent::is_set($movie_id)
-            ? $this->getById($movie_id)         // 映画IDで抽出
-            : $this->getAll();                  // すべて
+        try {
+            return
+                parent::is_set($movie_id)
+                ? $this->getById($movie_id)         // 映画IDで抽出
+                : $this->getAll();                  // すべて
+        } catch (\Throwable $th) {
+            $th;
+        }
     }
 
     public function post(): array

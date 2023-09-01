@@ -7,10 +7,10 @@
 // $dotenv = Dotenv\Dotenv::createImmutable(__DIR__, '.env.local');
 // $dotenv->load();
 
-include(__DIR__ . "/../Env.php");                          // 環境変数クラス
-include(__DIR__ . "/../sql.php");                          // SQLクラス
-include(__DIR__ . "/../Db.php");                           // DB接続クラス
-include(__DIR__ . "/controllers/controller.php");       // コントローラークラス(親クラス)
+include(__DIR__ . "/../Env.php");                   // 環境変数クラス
+include(__DIR__ . "/sql.php");                      // SQLクラス
+include(__DIR__ . "/../Db.php");                    // DB接続クラス
+include(__DIR__ . "/controllers/controller.php");   // コントローラークラス(親クラス)
 
 // =============================================================================
 // URIを分割して配列に格納
