@@ -7,9 +7,12 @@ class LoginController extends Controller
     // =============================================================================
     public function post(): array
     {
-        include_once(__DIR__ . "/../sql/Login.php");
-
-        return $this->login();
+        try {
+            include_once(__DIR__ . "/../sql/Login.php");
+            return $this->login();
+        } catch (\Throwable $th) {
+            $th;
+        }
     }
 
     // ログイン処理

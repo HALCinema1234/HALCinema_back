@@ -5,9 +5,12 @@ class TicketsController extends Controller implements crad
 
     public function get(): array
     {
-        include_once(__DIR__ . "/../sql/Tickets.php");
-
-        return $this->getAll();
+        try {
+            include_once(__DIR__ . "/../sql/Tickets.php");
+            return $this->getAll();
+        } catch (\Throwable $th) {
+            $th;
+        }
     }
 
     public function post(): array

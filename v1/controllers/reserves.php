@@ -4,19 +4,23 @@ class ReservesController extends Controller implements crad
 
     public function get($member_id = null): array
     {
-        // ------------------------------------------------------------
-        // SQLの読込
-        // ------------------------------------------------------------
-        include_once(__DIR__ . "/../sql/Seats.php");
-        include_once(__DIR__ . "/../sql/Reserves.php");
+        try {
+            // ------------------------------------------------------------
+            // SQLの読込
+            // ------------------------------------------------------------
+            include_once(__DIR__ . "/../sql/Seats.php");
+            include_once(__DIR__ . "/../sql/Reserves.php");
 
-        // ------------------------------------------------------------
-        // DB検索処理
-        // ------------------------------------------------------------
-        return
-            $this->is_set($member_id) ?
-            $this->getById($member_id)      // 会員IDで抽出
-            : parent::fatal_error();        // エラー
+            // ------------------------------------------------------------
+            // DB検索処理
+            // ------------------------------------------------------------
+            return
+                $this->is_set($member_id) ?
+                $this->getById($member_id)      // 会員IDで抽出
+                : parent::fatal_error();        // エラー
+        } catch (\Throwable $th) {
+            $th;
+        }
     }
 
     public function post(): array
@@ -26,43 +30,47 @@ class ReservesController extends Controller implements crad
 
     public function put(): array
     {
-        // ------------------------------------------------------------
-        // SQLの読込
-        // ------------------------------------------------------------
-        include_once(__DIR__ . "/../sql/Seats.php");
-        include_once(__DIR__ . "/../sql/Reserves.php");
+        try {
+            // ------------------------------------------------------------
+            // SQLの読込
+            // ------------------------------------------------------------
+            include_once(__DIR__ . "/../sql/Seats.php");
+            include_once(__DIR__ . "/../sql/Reserves.php");
 
-        // ------------------------------------------------------------
-        // データの取得
-        // ------------------------------------------------------------
-        $data = json_decode(parent::encode_utf8("php://input"), true);
+            // ------------------------------------------------------------
+            // データの取得
+            // ------------------------------------------------------------
+            $data = json_decode(parent::encode_utf8("php://input"), true);
 
-        // ------------------------------------------------------------
-        // バリデーション
-        // ------------------------------------------------------------
-        // 必須チェック(取得データがあるか)
-        if (empty($data)) {
-            // 取得データがないときはエラー
-            return parent::error(400, "invalid_param");
+            // ------------------------------------------------------------
+            // バリデーション
+            // ------------------------------------------------------------
+            // 必須チェック(取得データがあるか)
+            if (empty($data)) {
+                // 取得データがないときはエラー
+                return parent::error(400, "invalid_param");
+            }
+
+            // 必須チェック(取得データ内に指定のデータが含まれているか)
+            if (
+                !array_key_exists("manage_id", $data)
+                || !array_key_exists("member_id", $data)
+                || !array_key_exists("seat", $data)
+            ) {
+                return parent::error(400, "invalid_param");
+            }
+
+            // FIXME: 重複チェック(座席の重複)
+            // FIXME: 整合性チェック(既存の予約座席との衝突がないか)
+
+            // ------------------------------------------------------------
+            // DB登録処理
+            // ------------------------------------------------------------
+            // FIXME: 会員のみ購入可能(会員以外の対応まだです)
+            return $this->putReserves($data["manage_id"], $data["member_id"], $data["seat"]);
+        } catch (\Throwable $th) {
+            $th;
         }
-
-        // 必須チェック(取得データ内に指定のデータが含まれているか)
-        if (
-            !array_key_exists("manage_id", $data)
-            || !array_key_exists("member_id", $data)
-            || !array_key_exists("seat", $data)
-        ) {
-            return parent::error(400, "invalid_param");
-        }
-
-        // FIXME: 重複チェック(座席の重複)
-        // FIXME: 整合性チェック(既存の予約座席との衝突がないか)
-
-        // ------------------------------------------------------------
-        // DB登録処理
-        // ------------------------------------------------------------
-        // FIXME: 会員のみ購入可能(会員以外の対応まだです)
-        return $this->putReserves($data["manage_id"], $data["member_id"], $data["seat"]);
     }
 
     public function delete(): array

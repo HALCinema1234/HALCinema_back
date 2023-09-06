@@ -4,7 +4,13 @@ class Theaters
 {
     const GetById = "
         SELECT
-            theater.f_theater_type  AS type
+            theater.f_theater_id    AS id,
+            theater.f_theater_type  AS type,
+            CASE theater.f_theater_type
+                WHEN :theater_large     THEN :seats_large
+                WHEN :theater_medium    THEN :seats_medium
+                ELSE :seats_small
+            END                                             AS all_seats
         FROM
             t_movie_manages         AS manage
         JOIN

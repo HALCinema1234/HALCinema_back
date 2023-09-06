@@ -2,23 +2,26 @@
 {
     public function get($infomation = null): array
     {
-        if (parent::is_set($infomation)) {
-            switch ($infomation) {
-                case "seats":
-                    return $this->getSeats();
-                    break;
-                case "reserves":
-                    return $this->getReserves();
-                    break;
-                case "users":
-                    return $this->getUsers();
-                    break;
-                default:
-                    break;
+        try {
+            if (parent::is_set($infomation)) {
+                switch ($infomation) {
+                    case "seats":
+                        return $this->getSeats();
+                        break;
+                    case "reserves":
+                        return $this->getReserves();
+                        break;
+                    case "users":
+                        return $this->getUsers();
+                        break;
+                    default:
+                        break;
+                }
             }
+            return parent::fatal_error();
+        } catch (\Throwable $th) {
+            $th;
         }
-
-        return parent::fatal_error();
     }
 
     public function post(): array
