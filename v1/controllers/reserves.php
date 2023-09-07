@@ -23,12 +23,12 @@ class ReservesController extends Controller implements crad
         }
     }
 
-    public function post(): array
+    public function put(): array
     {
         return parent::fatal_error();
     }
 
-    public function put(): array
+    public function post(): array
     {
         try {
             // ------------------------------------------------------------
@@ -46,19 +46,19 @@ class ReservesController extends Controller implements crad
             // バリデーション
             // ------------------------------------------------------------
             // 必須チェック(取得データがあるか)
-            if (empty($data)) {
-                // 取得データがないときはエラー
-                return parent::error(400, "invalid_param");
-            }
+            // if (empty($data)) {
+            //     // 取得データがないときはエラー
+            //     return parent::error(400, "invalid_param");
+            // }
 
             // 必須チェック(取得データ内に指定のデータが含まれているか)
-            if (
-                !array_key_exists("manage_id", $data)
-                || !array_key_exists("member_id", $data)
-                || !array_key_exists("seat", $data)
-            ) {
-                return parent::error(400, "invalid_param");
-            }
+            // if (
+            //     !array_key_exists("manage_id", $data)
+            //     || !array_key_exists("member_id", $data)
+            //     || !array_key_exists("seat", $data)
+            // ) {
+            //     return parent::error(400, $_REQUEST);
+            // }
 
             // FIXME: 重複チェック(座席の重複)
             // FIXME: 整合性チェック(既存の予約座席との衝突がないか)
@@ -67,9 +67,9 @@ class ReservesController extends Controller implements crad
             // DB登録処理
             // ------------------------------------------------------------
             // FIXME: 会員のみ購入可能(会員以外の対応まだです)
-            return $this->putReserves($data["manage_id"], $data["member_id"], $data["seat"]);
+            return $this->putReserves($_REQUEST["manage_id"], $_REQUEST["member_id"], $_REQUEST["seat"]);
         } catch (\Throwable $th) {
-            $th;
+            return $th;
         }
     }
 
