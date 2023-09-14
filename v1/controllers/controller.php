@@ -88,4 +88,23 @@ class Controller
         $sourses->execute();
         return $sourses->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // ユーザー重複チェック
+    protected function check_users_duplication($email, $password): array
+    {
+        include_once(__DIR__ . "/../sql/Login.php");
+
+        $sourses = $this->db->connect()->prepare(Login::Check);
+        $sourses->bindparam(":email", $email, PDO::PARAM_STR);
+        $sourses->bindparam(":password", $password, PDO::PARAM_STR);
+        $sourses->execute();
+        $member = $sourses->fetch(PDO::FETCH_ASSOC);
+
+        if ($member) {
+            return $member;
+        } else {
+            $this->code = 401;
+            return ["error" => ["type" => "login_failed"]];
+        }
+    }
 }

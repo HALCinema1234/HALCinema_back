@@ -15,24 +15,13 @@ class Users
         END                             AS gender,          -- 性別
         member.f_member_phone_number    AS phone_number,    -- 電話番号
         member.f_member_mail_address    AS mail_address,    -- メールアドレス
-        job.f_job_name                  AS job,             -- 職業
-        NVL(reserve.count, 0)        AS count_used
+        job.f_job_name                  AS job              -- 職業
     FROM
         t_members   AS member
     JOIN
         t_jobs      AS job
     ON
-        member.f_job_id = job.f_job_id
-    LEFT JOIN
-        (   SELECT
-                f_member_id             AS id,
-                count(*)                AS count
-            FROM
-                t_reserves
-            GROUP BY
-                 f_member_id )          AS reserve
-    ON
-        member.f_member_id = reserve.id";
+        member.f_job_id = job.f_job_id";
 
     const GetById = "
         SELECT

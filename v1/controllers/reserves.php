@@ -23,11 +23,6 @@ class ReservesController extends Controller implements crad
         }
     }
 
-    public function put(): array
-    {
-        return parent::fatal_error();
-    }
-
     public function post(): array
     {
         try {
@@ -40,7 +35,7 @@ class ReservesController extends Controller implements crad
             // ------------------------------------------------------------
             // データの取得
             // ------------------------------------------------------------
-            $data = json_decode(parent::encode_utf8("php://input"), true);
+            // $data = json_decode(parent::encode_utf8("php://input"), true);
 
             // ------------------------------------------------------------
             // バリデーション
@@ -73,6 +68,11 @@ class ReservesController extends Controller implements crad
         }
     }
 
+    public function put(): array
+    {
+        return parent::fatal_error();
+    }
+
     public function delete(): array
     {
         return parent::fatal_error();
@@ -82,9 +82,14 @@ class ReservesController extends Controller implements crad
     public function getById($member_id): array
     {
         // 予約情報(会員IDで抽出)を取得する
-        $reserves           = parent::selectById(Reserves::GetById . "  LIMIT 1", $member_id)[0];
-        // 取得した予約情報と紐づく座席情報を取得する
-        $reserves["seat"]   = parent::selectById(Seats::GetByReserveId, $reserves["id"]);
+        $temp_reserves      = parent::selectById(Reserves::GetById . "  LIMIT 1", $member_id);
+
+        if (!$temp_reserves) {
+            return parent::fatal_error();
+        }
+
+        $reserves           = $temp_reserves[0];                                             // 予約情報(会員IDで抽出)を取得する
+        $reserves["seat"]   = parent::selectById(Seats::GetByReserveId, $reserves["id"]);    // 取得した予約情報と紐づく座席情報を取得する
 
         return $reserves ? $reserves : parent::fatal_error();
     }

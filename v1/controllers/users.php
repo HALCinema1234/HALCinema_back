@@ -3,16 +3,12 @@ class UsersController extends Controller implements crad
 {
     public function get(): array
     {
-        return parent::fatal_error();
-    }
-
-    public function post(): array
-    {
         try {
 
             include_once(__DIR__ . "/../sql/Users.php");
 
             $data = json_decode(parent::encode_utf8("php://input"), true);
+            // $data = $_REQUEST;
 
             // データが存在するか
             if (empty($data)) {
@@ -31,19 +27,26 @@ class UsersController extends Controller implements crad
         }
     }
 
-    public function put($isNew = null): array
+    public function post(): array
     {
         try {
             include_once(__DIR__ . "/../sql/Users.php");
 
+            // ------------------------------------------------------------
+            // データの取得
+            // ------------------------------------------------------------
             $data = json_decode(parent::encode_utf8("php://input"), true);
+            // $data = $_REQUEST;
 
+            // ------------------------------------------------------------
+            // バリデーション
+            // ------------------------------------------------------------
             // データが存在するか
             if (empty($data)) {
                 return parent::error(400, "invalid_param");
             }
 
-            // FIXME: バリデーション
+            // 必須チェック(取得データ内に指定のデータが含まれているか)
             if (
                 !array_key_exists("name", $data)
                 || !array_key_exists("name_kana", $data)
@@ -57,17 +60,61 @@ class UsersController extends Controller implements crad
                 return parent::error(400, "invalid_param");
             }
 
-            if ($this->is_set($isNew)) {
-                // 新規作成
-                return $isNew === "make"
-                    ? $this->insert($data)
-                    : parent::error(400, "invalid_param");;
-            } else {
-                // 更新
-                return array_key_exists("member_id", $data)
-                    ? $this->update($data)
-                    : parent::error(400, "invalid_param");
+            // 重複チェック
+            $check["duplication"] = parent::check_users_duplication($data["mail_address"], $data["password"]);
+            if (!array_key_exists("error", $check["duplication"])) {
+                return parent::error(422, "unprocessable_entity");
             }
+
+            // 新規作成
+            return $this->insert($data);
+        } catch (\Throwable $th) {
+            $th;
+        }
+    }
+
+    public function put(): array
+    {
+        try {
+            include_once(__DIR__ . "/../sql/Users.php");
+
+            // ------------------------------------------------------------
+            // データの取得
+            // ------------------------------------------------------------
+            // $data = json_decode(parent::encode_utf8("php://input"), true);
+            $data = $_REQUEST;
+
+            // ------------------------------------------------------------
+            // バリデーション
+            // ------------------------------------------------------------
+            // データが存在するか
+            if (empty($data)) {
+                return parent::error(400, "invalid_param");
+            }
+
+            // 必須チェック(取得データ内に指定のデータが含まれているか)
+            if (
+                !array_key_exists("member_id", $data)
+                || !array_key_exists("name", $data)
+                || !array_key_exists("name_kana", $data)
+                || !array_key_exists("password", $data)
+                || !array_key_exists("birthday", $data)
+                || !array_key_exists("gender", $data)
+                || !array_key_exists("phone_number", $data)
+                || !array_key_exists("mail_address", $data)
+                || !array_key_exists("job_id", $data)
+            ) {
+                return parent::error(400, "invalid_param");
+            }
+
+            // 重複チェック
+            $check["duplication"] = parent::check_users_duplication($data["mail_address"], $data["password"]);
+            if (!array_key_exists("error", $check["duplication"])) {
+                return parent::error(422, "unprocessable_entity");
+            }
+
+            // 更新
+            return $this->update($data);
         } catch (\Throwable $th) {
             $th;
         }
@@ -78,9 +125,8 @@ class UsersController extends Controller implements crad
         return parent::fatal_error();
     }
 
-    // ================================================================
-    // 関数
-    // ================================================================
+
+    // ユーザーID検索
     private function postById($member_id): array
     {
         // 会員IDで抽出
@@ -88,6 +134,7 @@ class UsersController extends Controller implements crad
         return $sourses ? $sourses : parent::fatal_error();
     }
 
+    // 新規作成
     private function insert($data): array
     {
         // 新規作成
@@ -102,11 +149,15 @@ class UsersController extends Controller implements crad
         $statement->bindValue(":job_id",    $data["job_id"],    PDO::PARAM_INT);
         $statement->execute();
 
+        // 新規作成されたユーザーIDの取得
         $member_id = parent::select(Users::GetMaxMemberId)[0]["member_id"];
+
+        // 作成内容を返却
         $this->code = 201;
         return $this->postById($member_id);
     }
 
+    // 更新
     private function update($data): array
     {
         // 更新
@@ -122,6 +173,7 @@ class UsersController extends Controller implements crad
         $statement->bindValue(":member_id", $data["member_id"], PDO::PARAM_INT);
         $statement->execute();
 
+        // 更新内容を返却
         $this->code = 201;
         return $this->postById($data["member_id"]);
     }

@@ -2,10 +2,7 @@
 class LoginController extends Controller
 {
 
-    // =============================================================================
-    // post
-    // =============================================================================
-    public function post(): array
+    public function get(): array
     {
         try {
             include_once(__DIR__ . "/../sql/Login.php");
@@ -19,6 +16,7 @@ class LoginController extends Controller
     private function login(): array
     {
         $data = json_decode(parent::encode_utf8("php://input"), true);
+        // $data = $_REQUEST;
 
         if (empty($data)) {
             // $postに必要なキーが存在することをチェック
@@ -35,17 +33,6 @@ class LoginController extends Controller
         $email      = $data["email"];
         $password   = $data["password"];
 
-        $sourses = parent::connectDb()->prepare(Login::Check);
-        $sourses->bindparam(":email", $email, PDO::PARAM_STR);
-        $sourses->bindparam(":password", $password, PDO::PARAM_STR);
-        $sourses->execute();
-        $member = $sourses->fetch(PDO::FETCH_ASSOC);
-
-        if ($member) {
-            return $member;
-        } else {
-            $this->code = 401;
-            return ["error" => ["type" => "login_failed"]];
-        }
+        return parent::check_users_duplication($email, $password);
     }
 }
