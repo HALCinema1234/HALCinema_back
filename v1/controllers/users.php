@@ -35,8 +35,8 @@ class UsersController extends Controller implements crad
             // ------------------------------------------------------------
             // データの取得
             // ------------------------------------------------------------
-            $data = json_decode(parent::encode_utf8("php://input"), true);
-            // $data = $_REQUEST;
+            // $data = json_decode(parent::encode_utf8("php://input"), true);
+            $data = $_REQUEST;
 
             // ------------------------------------------------------------
             // バリデーション
