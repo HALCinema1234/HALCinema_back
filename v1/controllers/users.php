@@ -7,8 +7,8 @@ class UsersController extends Controller implements crad
 
             include_once(__DIR__ . "/../sql/Users.php");
 
-            $data = json_decode(parent::encode_utf8("php://input"), true);
-            // $data = $_REQUEST;
+            // $data = json_decode(parent::encode_utf8("php://input"), true);
+            $data = $_REQUEST;
 
             // データが存在するか
             if (empty($data)) {
