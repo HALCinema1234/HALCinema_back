@@ -1,5 +1,5 @@
 <?php
-interface crad
+interface crud
 {
     public function get(): array;
     public function post(): array;
