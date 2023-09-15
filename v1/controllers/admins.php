@@ -1,4 +1,4 @@
-<?php class AdminsController extends Controller implements crad
+<?php class AdminsController extends Controller implements crud
 {
     public function get($infomation = null): array
     {

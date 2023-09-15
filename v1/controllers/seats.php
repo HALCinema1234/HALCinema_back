@@ -1,5 +1,5 @@
 <?php
-class SeatsController extends Controller implements crad
+class SeatsController extends Controller implements crud
 {
 
     public function get($manage_id = null): array

@@ -1,5 +1,5 @@
 <?php
-class MoviesController extends Controller implements crad
+class MoviesController extends Controller implements crud
 {
     public function get($movie_id = null): array
     {

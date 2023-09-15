@@ -1,6 +1,6 @@
 <?php
 
-class TicketsController extends Controller implements crad
+class TicketsController extends Controller implements crud
 {
 
     public function get(): array

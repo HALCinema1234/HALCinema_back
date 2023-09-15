@@ -1,5 +1,5 @@
 <?php
-class UsersController extends Controller implements crad
+class UsersController extends Controller implements crud
 {
     public function get(): array
     {
@@ -21,7 +21,7 @@ class UsersController extends Controller implements crad
             }
 
             // 会員IDで抽出する
-            return $this->postById($data["member_id"]);
+            return $this->getById($data["member_id"]);
         } catch (\Throwable $th) {
             $th;
         }
@@ -127,7 +127,7 @@ class UsersController extends Controller implements crad
 
 
     // ユーザーID検索
-    private function postById($member_id): array
+    private function getById($member_id): array
     {
         // 会員IDで抽出
         $sourses = parent::selectById(Users::GetById, $member_id);
@@ -154,7 +154,7 @@ class UsersController extends Controller implements crad
 
         // 作成内容を返却
         $this->code = 201;
-        return $this->postById($member_id);
+        return $this->getById($member_id);
     }
 
     // 更新
@@ -175,6 +175,6 @@ class UsersController extends Controller implements crad
 
         // 更新内容を返却
         $this->code = 201;
-        return $this->postById($data["member_id"]);
+        return $this->getById($data["member_id"]);
     }
 }
